@@ -1,0 +1,30 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TyrannosaurusPlex.Properties" GeneratedClassName="DB">
+  <Profiles />
+  <Settings>
+    <Setting Name="HOST" Type="System.String" Scope="User">
+      <Value Profile="(Default)">localhost</Value>
+    </Setting>
+    <Setting Name="DATABASE" Type="System.String" Scope="User">
+      <Value Profile="(Default)">t_plex_db</Value>
+    </Setting>
+    <Setting Name="USER" Type="System.String" Scope="User">
+      <Value Profile="(Default)">root</Value>
+    </Setting>
+    <Setting Name="PASSWORD" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1328259</Value>
+    </Setting>
+    <Setting Name="RECIPE_TABLE" Type="System.String" Scope="User">
+      <Value Profile="(Default)">recipes</Value>
+    </Setting>
+    <Setting Name="RECIPE_TABLE_COLUMN_SCHEMA" Type="System.String" Scope="User">
+      <Value Profile="(Default)">id,part_number,checksheet_type,key_sequence,csv_location,timestamp_col,a_col,b_col,c_col,d_col,e_col,f_col,g_col,h_col,i_col,j_col,k_col,l_col,m_col</Value>
+    </Setting>
+    <Setting Name="CHECKSHEET_TABLE" Type="System.String" Scope="User">
+      <Value Profile="(Default)">checksheet_types</Value>
+    </Setting>
+    <Setting Name="CHECKSHEET_TABLE_COLUMN_SCHEMA" Type="System.String" Scope="User">
+      <Value Profile="(Default)">sheet_type</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

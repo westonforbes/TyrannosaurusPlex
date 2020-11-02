@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6A6C1ED7-CE1C-469C-81AA-36FCF919C5C7}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>TyrannosaurusPlex</RootNamespace>
+    <AssemblyName>TyrannosaurusPlex</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="KeystrokeAPI">
+      <HintPath>..\Libraries\KeyLoggerLibrary(Imported)\Keystroke.ConsoleAppTest\bin\Debug\KeystrokeAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="LoggerLibrary">
+      <HintPath>..\Libraries\LoggerLibrary\bin\Release\LoggerLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=8.0.22.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\MySQL\Connector NET 8.0\Assemblies\v4.5.2\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TableProcessorLibrary">
+      <HintPath>..\Libraries\TableProcessorLibrary\bin\Release\TableProcessorLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BACKEND_CLASSES\DB_CONNECTION.cs" />
+    <Compile Include="FRONTEND_CLASSES\FORM_ADD_RECIPE.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FRONTEND_CLASSES\FORM_ADD_RECIPE.Designer.cs">
+      <DependentUpon>FORM_ADD_RECIPE.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FRONTEND_CLASSES\FORM_MAIN\FORM_MAIN.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FRONTEND_CLASSES\FORM_MAIN\FORM_MAIN.Designer.cs">
+      <DependentUpon>FORM_MAIN.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BACKEND_CLASSES\KEY_LOGGER.cs" />
+    <Compile Include="FRONTEND_CLASSES\FORM_MAIN\PARTIAL_KEY_LOGGER.cs" />
+    <Compile Include="FRONTEND_CLASSES\FORM_MAIN\PARTIAL_RECIPE_DB.cs" />
+    <Compile Include="OTHER\Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FRONTEND_CLASSES\FORM_ADD_RECIPE.resx">
+      <DependentUpon>FORM_ADD_RECIPE.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FRONTEND_CLASSES\FORM_MAIN\FORM_MAIN.resx">
+      <DependentUpon>FORM_MAIN.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\DB.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>DB.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="Properties\DB.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>DB.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Properties\Misc.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Misc.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Misc.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Misc.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OTHER\App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OTHER\Icon.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
