@@ -19,7 +19,6 @@ Z:\My Software\TyrannosaurusPlex\bin\Debug\K4os.Compression.LZ4.dll
 Z:\My Software\TyrannosaurusPlex\bin\Debug\K4os.Hash.xxHash.dll
 Z:\My Software\TyrannosaurusPlex\bin\Debug\System.Numerics.Vectors.dll
 Z:\My Software\TyrannosaurusPlex\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
-Z:\My Software\TyrannosaurusPlex\bin\Debug\KeystrokeAPI.pdb
 Z:\My Software\TyrannosaurusPlex\bin\Debug\LoggerLibrary.pdb
 Z:\My Software\TyrannosaurusPlex\bin\Debug\MySql.Data.xml
 Z:\My Software\TyrannosaurusPlex\obj\Debug\TyrannosaurusPlex.FORM_MAIN.resources
@@ -30,3 +29,5 @@ Z:\My Software\TyrannosaurusPlex\obj\Debug\TyrannosaurusPlex.csprojAssemblyRefer
 Z:\My Software\TyrannosaurusPlex\obj\Debug\TyrannosaurusPlex.FORM_ADD_RECIPE.resources
 Z:\My Software\TyrannosaurusPlex\bin\Debug\TableProcessorLibrary.dll
 Z:\My Software\TyrannosaurusPlex\bin\Debug\TableProcessorLibrary.pdb
+Z:\My Software\TyrannosaurusPlex\bin\Debug\FORBES.dll
+Z:\My Software\TyrannosaurusPlex\bin\Debug\FORBES.pdb

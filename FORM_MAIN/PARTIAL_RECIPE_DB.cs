@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
-using System.Collections;
-
+using FORBES;
 
 namespace TyrannosaurusPlex
 {
@@ -19,21 +12,21 @@ namespace TyrannosaurusPlex
     {
         DataTable LOCAL_TABLE_COPY = new DataTable();
 
-        DB_CONNECTION DB = new DB_CONNECTION(Properties.DB.Default.HOST, 
-                                             Properties.DB.Default.DATABASE,
-                                             Properties.DB.Default.USER,
-                                             Properties.DB.Default.PASSWORD); //Instance of the database connection.
+        MYSQL_COMS DB = new MYSQL_COMS(Properties.DB.Default.HOST, 
+                                       Properties.DB.Default.DATABASE,
+                                       Properties.DB.Default.USER,
+                                       Properties.DB.Default.PASSWORD); //Instance of the database connection.
         private void DB_SETUP()
         {
             EVENTS.LOG_MESSAGE(1, "ENTER");
             
             DB.CONNECTION_CHANGED += new EventHandler(CONNECTION_CHANGED); //Add a form level event handler for connection state change.
-            CONNECTION_CHANGED(null, new DB_CONNECTION.CONNECTION_CHANGED_EVENT_ARGS(false)); //Call the connection state change function but force a disconnected state.
+            CONNECTION_CHANGED(null, new MYSQL_COMS.CONNECTION_CHANGED_EVENT_ARGS(false)); //Call the connection state change function but force a disconnected state.
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
         }
         private void CONNECTION_CHANGED(object sender, EventArgs e) //Called when the connection state changes.
         {
-            var E = (DB_CONNECTION.CONNECTION_CHANGED_EVENT_ARGS)e;
+            var E = (MYSQL_COMS.CONNECTION_CHANGED_EVENT_ARGS)e;
             //Controls to enable on connection.
             BTN_ADD_RECIPE.Enabled = E.FULLY_CONNECTED;
             BTN_DISCONNECT.Enabled = E.FULLY_CONNECTED;
@@ -93,7 +86,7 @@ namespace TyrannosaurusPlex
                 EVENTS.LOG_MESSAGE(1, "EXIT_FAIL");
                 return; //Exit.
             }
-            DataTable CHECKSHEET_DATA = DB.GET_DATA(Properties.DB.Default.CHECKSHEET_TABLE, Properties.DB.Default.CHECKSHEET_TABLE_COLUMN_SCHEMA); //Get the checksheet data listing to pass over to the form.
+            DataTable CHECKSHEET_DATA = DB.GET_TABLE(Properties.DB.Default.CHECKSHEET_TABLE, Properties.DB.Default.CHECKSHEET_TABLE_COLUMN_SCHEMA); //Get the checksheet data listing to pass over to the form.
             var ADD_FORM = new FORM_ADD_RECIPE(CHECKSHEET_DATA); //No matter what, make a form.
             if ((Button)sender == BTN_EDIT) //However, if the sender is the recipe edit button, tweak what we send.
             {
@@ -132,7 +125,7 @@ namespace TyrannosaurusPlex
         private void UPDATE_TABLE(object sender, EventArgs e)
         {
             EVENTS.LOG_MESSAGE(1, "ENTER");
-            LOCAL_TABLE_COPY = DB.GET_DATA(Properties.DB.Default.RECIPE_TABLE, Properties.DB.Default.RECIPE_TABLE_COLUMN_SCHEMA);
+            LOCAL_TABLE_COPY = DB.GET_TABLE(Properties.DB.Default.RECIPE_TABLE, Properties.DB.Default.RECIPE_TABLE_COLUMN_SCHEMA);
             DGV_RECIPE_TABLE.DataSource = LOCAL_TABLE_COPY;
             DGV_RECIPE_TABLE.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             DGV_RECIPE_TABLE.MultiSelect = false;

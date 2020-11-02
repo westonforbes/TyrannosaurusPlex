@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FORBES;
 
 namespace TyrannosaurusPlex
 {
@@ -56,19 +57,19 @@ namespace TyrannosaurusPlex
         }
         private void KEY_LOGGER_START(object sender, EventArgs e) //Starts the keylogger.
         {
-            KEY_LOGGER.START_KEYLOGGER();
+            KEY_LOGGER.START_KEY_LOGGER();
         }
         private void KEY_LOGGER_PAUSE(object sender, EventArgs e) //Not currently used.
         {
-            KEY_LOGGER.PAUSE_KEYLOGGER();
+            KEY_LOGGER.PAUSE_KEY_LOGGER();
         }
         private void KEY_LOGGER_CLEAR(object sender, EventArgs e) //Not currently used.
         {
-            KEY_LOGGER.CLEAR_LOGGER();
+            KEY_LOGGER.CLEAR_KEY_LOGGER();
         }
         private void RECORD_SEQUENCE_START(object sender, EventArgs e) //Records keys to SEQUENCE_LIST/DATATABLE.
         {
-            KEY_LOGGER.START_KEYLOGGER();
+            KEY_LOGGER.START_KEY_LOGGER();
             BTN_RECORD_START.Enabled = false;
             BTN_RECORD_STOP.Enabled = true;
             SEQUENCE_LIST.Clear();
@@ -80,7 +81,7 @@ namespace TyrannosaurusPlex
             BTN_RECORD_START.Enabled = true;
             BTN_RECORD_STOP.Enabled = false;
             RECORD_SEQUENCE_ACTIVE = false;
-            KEY_LOGGER.PAUSE_KEYLOGGER();
+            KEY_LOGGER.PAUSE_KEY_LOGGER();
         }
         private void REPLAY_SEQUENCE_START(object sender, EventArgs e)
         {

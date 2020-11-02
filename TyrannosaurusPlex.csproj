@@ -33,15 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="KeystrokeAPI">
-      <HintPath>..\Libraries\KeyLoggerLibrary(Imported)\Keystroke.ConsoleAppTest\bin\Debug\KeystrokeAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="LoggerLibrary">
-      <HintPath>..\Libraries\LoggerLibrary\bin\Release\LoggerLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Data, Version=8.0.22.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+    <Reference Include="FORBES, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\MySQL\Connector NET 8.0\Assemblies\v4.5.2\MySql.Data.dll</HintPath>
+      <HintPath>..\Libraries\FORBES\bin\Release\FORBES.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -59,28 +53,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BACKEND_CLASSES\DB_CONNECTION.cs" />
-    <Compile Include="FRONTEND_CLASSES\FORM_ADD_RECIPE.cs">
+    <Compile Include="FORM_ADD_RECIPE.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FRONTEND_CLASSES\FORM_ADD_RECIPE.Designer.cs">
+    <Compile Include="FORM_ADD_RECIPE.Designer.cs">
       <DependentUpon>FORM_ADD_RECIPE.cs</DependentUpon>
     </Compile>
-    <Compile Include="FRONTEND_CLASSES\FORM_MAIN\FORM_MAIN.cs">
+    <Compile Include="FORM_MAIN\FORM_MAIN.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FRONTEND_CLASSES\FORM_MAIN\FORM_MAIN.Designer.cs">
+    <Compile Include="FORM_MAIN\FORM_MAIN.Designer.cs">
       <DependentUpon>FORM_MAIN.cs</DependentUpon>
     </Compile>
-    <Compile Include="BACKEND_CLASSES\KEY_LOGGER.cs" />
-    <Compile Include="FRONTEND_CLASSES\FORM_MAIN\PARTIAL_KEY_LOGGER.cs" />
-    <Compile Include="FRONTEND_CLASSES\FORM_MAIN\PARTIAL_RECIPE_DB.cs" />
-    <Compile Include="OTHER\Program.cs" />
+    <Compile Include="FORM_MAIN\PARTIAL_KEY_LOGGER.cs" />
+    <Compile Include="FORM_MAIN\PARTIAL_RECIPE_DB.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FRONTEND_CLASSES\FORM_ADD_RECIPE.resx">
+    <EmbeddedResource Include="FORM_ADD_RECIPE.resx">
       <DependentUpon>FORM_ADD_RECIPE.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FRONTEND_CLASSES\FORM_MAIN\FORM_MAIN.resx">
+    <EmbeddedResource Include="FORM_MAIN\FORM_MAIN.resx">
       <DependentUpon>FORM_MAIN.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -114,13 +106,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="OTHER\App.config" />
+    <None Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="OTHER\Icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="DOCUMENTATION\REVISION_HISTORY.txt" />
+    <Content Include="CHANGELOG.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
