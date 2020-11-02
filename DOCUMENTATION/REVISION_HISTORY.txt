@@ -1,0 +1,3 @@
+﻿REVISION 2020-11-02-01: Initial commit.
+REVISION 2020-11-02-02: Parameterizing the function EXECUTE_COMMAND as it struggles with the literal string of the csv filepath. This will have the additional benifit of
+						preventing SQL injections. Backup save before trying to break off SQL functions into its own library.

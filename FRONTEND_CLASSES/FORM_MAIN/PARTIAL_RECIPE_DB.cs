@@ -173,11 +173,18 @@ namespace TyrannosaurusPlex
             EVENTS.LOG_MESSAGE(1, "ENTER");
             //Extract data out of arguments and build query string.
             var E = (RECIPE_DATA)e; //Specify the exact type of EventArgs.
-            string INSERT_LOCATION = "INSERT INTO " + Properties.DB.Default.RECIPE_TABLE + " (" + 
-                                    "part_number," + 
-                                    "checksheet_type," + 
+
+            //Create the parameter array we're going to pass to the EXECUTE_COMMAND function.
+            SQL_PARAMETER[] PARAMS = new SQL_PARAMETER[18];
+            for (int i = 0; i < PARAMS.Length; i++) //Since this is an array of a custom type, loop through and initialize each element...
+                PARAMS[i] = new SQL_PARAMETER();
+
+            //Define where we're going to insert data.
+            string INSERT_LOCATION = "INSERT INTO " + Properties.DB.Default.RECIPE_TABLE + " (" +
+                                    "part_number," +
+                                    "checksheet_type," +
                                     "key_sequence," +
-                                    "?path," +
+                                    "csv_location," +
                                     "timestamp_col," +
                                     "a_col," +
                                     "b_col," +
@@ -193,26 +200,53 @@ namespace TyrannosaurusPlex
                                     "l_col," +
                                     "m_col" +
                                     ") ";
-            string INSERT_DATA = "VALUES(" + "" +
-                                    "\"" + E.part_number + "\"," +
-                                    "\"" + E.checksheet_type + "\"," +
-                                    "\"" + E.key_sequence + "\"," +
-                                    "\"" + E.csv_location + "\"," +
-                                    "\"" + E.timestamp_col + "\"," +
-                                    "\"" + E.a_col + "\"," +
-                                    "\"" + E.b_col + "\"," +
-                                    "\"" + E.c_col + "\"," +
-                                    "\"" + E.d_col + "\"," +
-                                    "\"" + E.e_col + "\"," +
-                                    "\"" + E.f_col + "\"," +
-                                    "\"" + E.g_col + "\"," +
-                                    "\"" + E.h_col + "\"," +
-                                    "\"" + E.i_col + "\"," +
-                                    "\"" + E.j_col + "\"," +
-                                    "\"" + E.k_col + "\"," +
-                                    "\"" + E.l_col + "\"," +
-                                    "\"" + E.m_col + "\"" +
-                                    ");";
+
+            //Define the escape strings. These are the strings that will subsitute in data in the COMMAND_STRING.
+            PARAMS[0].ESCAPE_STRING = "?part_number";
+            PARAMS[1].ESCAPE_STRING = "?checksheet_type";
+            PARAMS[2].ESCAPE_STRING = "?key_sequence";
+            PARAMS[3].ESCAPE_STRING = "?csv_location";
+            PARAMS[4].ESCAPE_STRING = "?timestamp_col";
+            PARAMS[5].ESCAPE_STRING = "?a_col";
+            PARAMS[6].ESCAPE_STRING = "?b_col";
+            PARAMS[7].ESCAPE_STRING = "?c_col";
+            PARAMS[8].ESCAPE_STRING = "?d_col";
+            PARAMS[9].ESCAPE_STRING = "?e_col";
+            PARAMS[10].ESCAPE_STRING = "?f_col";
+            PARAMS[11].ESCAPE_STRING = "?g_col";
+            PARAMS[12].ESCAPE_STRING = "?h_col";
+            PARAMS[13].ESCAPE_STRING = "?i_col";
+            PARAMS[14].ESCAPE_STRING = "?j_col";
+            PARAMS[15].ESCAPE_STRING = "?k_col";
+            PARAMS[16].ESCAPE_STRING = "?l_col";
+            PARAMS[17].ESCAPE_STRING = "?m_col";
+
+            //Create the second part of the command string.
+            string INSERT_DATA = "VALUES(";
+            for (int i = 0; i < PARAMS.Length; i++)
+                INSERT_DATA += PARAMS[i].ESCAPE_STRING + ",";
+            INSERT_DATA = INSERT_DATA.TrimEnd(',');
+            INSERT_DATA += ")";
+
+            //Define all the data that ties to the escape strings.
+            PARAMS[0].STRING_TO_INSERT = E.part_number;
+            PARAMS[1].STRING_TO_INSERT = E.checksheet_type;
+            PARAMS[2].STRING_TO_INSERT = E.key_sequence;
+            PARAMS[3].STRING_TO_INSERT = E.csv_location;
+            PARAMS[4].STRING_TO_INSERT = E.timestamp_col.ToString();
+            PARAMS[5].STRING_TO_INSERT = E.a_col.ToString();
+            PARAMS[6].STRING_TO_INSERT = E.b_col.ToString();
+            PARAMS[7].STRING_TO_INSERT = E.c_col.ToString();
+            PARAMS[8].STRING_TO_INSERT = E.d_col.ToString();
+            PARAMS[9].STRING_TO_INSERT = E.e_col.ToString();
+            PARAMS[10].STRING_TO_INSERT = E.f_col.ToString();
+            PARAMS[11].STRING_TO_INSERT = E.g_col.ToString();
+            PARAMS[12].STRING_TO_INSERT = E.h_col.ToString();
+            PARAMS[13].STRING_TO_INSERT = E.i_col.ToString();
+            PARAMS[14].STRING_TO_INSERT = E.j_col.ToString();
+            PARAMS[15].STRING_TO_INSERT = E.k_col.ToString();
+            PARAMS[16].STRING_TO_INSERT = E.l_col.ToString();
+            PARAMS[17].STRING_TO_INSERT = E.m_col.ToString();
 
             //Check to make sure there is no current entry that matches for part number and 
             foreach (DataRow RECORD in LOCAL_TABLE_COPY.Rows)
@@ -228,9 +262,12 @@ namespace TyrannosaurusPlex
                     return;
                 }
             }
-            string COMMAND_STRING = INSERT_LOCATION + INSERT_DATA;
-            Console.WriteLine(INSERT_DATA);
-            int RESULT = DB.EXECUTE_COMMAND(COMMAND_STRING);
+
+            //Issue the command.
+            string COMMAND_STRING = INSERT_LOCATION + INSERT_DATA; //Combine the strings together.
+            int RESULT = DB.EXECUTE_COMMAND(COMMAND_STRING, PARAMS);
+
+            //If a negative 1 is returned, this means failure.
             if(RESULT == -1 )
             {
                 string MESSAGE;

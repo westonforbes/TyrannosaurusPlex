@@ -167,15 +167,22 @@ namespace TyrannosaurusPlex
             }
             return null;
         }
-        public int EXECUTE_COMMAND(string COMMAND_STRING)
+        public int EXECUTE_COMMAND(string COMMAND_STRING, SQL_PARAMETER[] PARAMETERS_ARRAY = null)
         {
             EVENTS.LOG_MESSAGE(1, "ENTER");
             try
             {
-                int NUMBER_OF_ROWS_AFFECTED;
-                MySqlTransaction TRANSACTION = CONNECTION.BeginTransaction();
-                MySqlCommand COMMAND = CONNECTION.CreateCommand();
-                COMMAND.CommandText = COMMAND_STRING;
+                int NUMBER_OF_ROWS_AFFECTED; //This will be returned.
+                MySqlTransaction TRANSACTION = CONNECTION.BeginTransaction(); //Start connection.
+                MySqlCommand COMMAND = CONNECTION.CreateCommand(); 
+                COMMAND.CommandText = COMMAND_STRING; //Set the command literal text.
+                if (PARAMETERS_ARRAY != null) //If parameters were passed...
+                {
+                    foreach (SQL_PARAMETER PARAMETER in PARAMETERS_ARRAY) //For each parameter passed...
+                    {
+                        COMMAND.Parameters.AddWithValue(PARAMETER.ESCAPE_STRING, PARAMETER.STRING_TO_INSERT); //Find the escape string in the literal string and substitute it with STRING_TO_INSERT.
+                    }
+                }
                 NUMBER_OF_ROWS_AFFECTED = COMMAND.ExecuteNonQuery();
                 TRANSACTION.Commit();
                 EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");

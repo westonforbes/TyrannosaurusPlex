@@ -41,4 +41,14 @@ namespace TyrannosaurusPlex
         public int m_col { get; set; }
     } //Create a structure we'll pass back with a invokation of the DATA_READY event.
 
+    public class SQL_PARAMETER
+    {
+        public SQL_PARAMETER()
+        {
+            ESCAPE_STRING = "";
+            STRING_TO_INSERT = "";
+        }
+        public string ESCAPE_STRING;
+        public string STRING_TO_INSERT;
+    }
 }
