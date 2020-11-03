@@ -2,3 +2,4 @@
 2020-11-02-02 - Parameterizing the function EXECUTE_COMMAND as it struggles with the literal string of the csv filepath. This will have the additional benifit of
 				preventing SQL injections. Backup save before trying to break off SQL functions into its own library.
 2020-11-02-03 - Moved backend functions over to dll, as I am sure I'll use them in the future.
+2020-11-03-01 - Lots of changes. Lots of code cleanup.

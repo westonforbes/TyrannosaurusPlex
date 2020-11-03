@@ -22,5 +22,26 @@ namespace TyrannosaurusPlex
             INJECTION_TABLE_SETUP();
             DB_SETUP();
         }
+
+        private void MENU_ITEM_TOOL_STRIP_Click(object sender, EventArgs e)
+        {
+            bool FORM_EXISTS = false;
+            FormCollection OPEN_FORMS = Application.OpenForms;
+
+            foreach (Form FORM in OPEN_FORMS)
+            {
+                if (FORM.Name == "FORM_LOGS")
+                {
+                    FORM.BringToFront();
+                    FORM_EXISTS = true;
+                    break;
+                }
+            }
+            if(!FORM_EXISTS)
+            {
+                FORM_LOGS LOG_FORM = new FORM_LOGS();
+                LOG_FORM.Show();
+            }
+        }
     }
 }

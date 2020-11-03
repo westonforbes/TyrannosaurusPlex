@@ -55,11 +55,13 @@ namespace TyrannosaurusPlex
             if (CURRENT_RECIPE_DATA != null)
                 LOAD_IN_EDIT_DATA(CURRENT_RECIPE_DATA);
 
+            FORM_MAIN.OK_TO_CLOSE_ADD_RECIPE_FORM += new EventHandler(CLOSE);
         }
 
         //Methods
         private void LOAD_IN_EDIT_DATA(RECIPE_DATA CURRENT_RECIPE_DATA)
         {
+            EVENTS.LOG_MESSAGE(1, "ENTER");
             //Load in part number.
             TXT_BOX_PART_NUM.Text = CURRENT_RECIPE_DATA.part_number;
 
@@ -72,7 +74,7 @@ namespace TyrannosaurusPlex
             TXT_BOX_KEYENCE.Text = MODIFIED_PATH;
 
             //Load CSV file into viewer.
-            BTN_PREVIEW_CLICK(null, null);
+            LOAD_CSV_DATA(null, null);
 
             //Assign the proper headers.
             foreach(DataGridViewColumn COLUMN in DGV1.Columns)
@@ -105,9 +107,9 @@ namespace TyrannosaurusPlex
                     COLUMN.HeaderText = "M";
                 if (COLUMN.Index == CURRENT_RECIPE_DATA.timestamp_col)
                     COLUMN.HeaderText = "TimeStamp";
-
             }
-            
+            COLOR_DGV_COLUMNS();
+            EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
         }
         private int VALIDATE_PART_NUMBER()
         {
@@ -140,11 +142,6 @@ namespace TyrannosaurusPlex
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
             TXT_BOX_PART_NUM.Text = TEXT; //Reinsert the capitalized version of the part number into the text field.
             return 0;
-
-        }
-
-        private void COLOR_COLUMNS(string TEXT)
-        {
 
         }
         private void BTN_SAVE_CLICK(object sender, EventArgs e)
@@ -193,14 +190,9 @@ namespace TyrannosaurusPlex
             }
 
             //Check if the keyence csv path is valid-------------------------------------------------------------
-            if (!System.IO.File.Exists(TXT_BOX_KEYENCE.Text)) //If the file does not exist.
-            {
-                string MESSAGE = "The Keyence CSV file does not exist. Plese check filepath.";
-                MessageBox.Show(MESSAGE, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                EVENTS.LOG_MESSAGE(2, "EXCEPTION", MESSAGE);
-                EVENTS.LOG_MESSAGE(1, "EXIT_FAIL");
-                return; //Cancel all other operations.
-            }
+            bool IS_CSV_VALID = CHECK_IF_CSV_IS_VALID();
+            if (!IS_CSV_VALID)
+                return;
 
             //Check that data has been previewed in the viewer---------------------------------------------------
             if(DGV1.Rows.Count <= 0)
@@ -254,40 +246,40 @@ namespace TyrannosaurusPlex
                         DATA.a_col = COLUMN.Index;
                         break;
                     case ("B"):
-                        DATA.a_col = COLUMN.Index;
+                        DATA.b_col = COLUMN.Index;
                         break;
                     case ("C"):
-                        DATA.a_col = COLUMN.Index;
+                        DATA.c_col = COLUMN.Index;
                         break;
                     case ("D"):
-                        DATA.a_col = COLUMN.Index;
+                        DATA.d_col = COLUMN.Index;
                         break;
                     case ("E"):
-                        DATA.a_col = COLUMN.Index;
+                        DATA.e_col = COLUMN.Index;
                         break;
                     case ("F"):
-                        DATA.a_col = COLUMN.Index;
+                        DATA.f_col = COLUMN.Index;
                         break;
                     case ("G"):
-                        DATA.a_col = COLUMN.Index;
+                        DATA.g_col = COLUMN.Index;
                         break;
                     case ("H"):
-                        DATA.a_col = COLUMN.Index;
+                        DATA.h_col = COLUMN.Index;
                         break;
                     case ("I"):
-                        DATA.a_col = COLUMN.Index;
+                        DATA.i_col = COLUMN.Index;
                         break;
                     case ("J"):
-                        DATA.a_col = COLUMN.Index;
+                        DATA.j_col = COLUMN.Index;
                         break;
                     case ("K"):
-                        DATA.a_col = COLUMN.Index;
+                        DATA.k_col = COLUMN.Index;
                         break;
                     case ("L"):
-                        DATA.a_col = COLUMN.Index;
+                        DATA.l_col = COLUMN.Index;
                         break;
                     case ("M"):
-                        DATA.a_col = COLUMN.Index;
+                        DATA.m_col = COLUMN.Index;
                         break;
 
                 }
@@ -296,16 +288,16 @@ namespace TyrannosaurusPlex
             //Invoke delegate with info pack and close-----------------------------------------------------------
             DATA_READY?.Invoke(null, DATA);
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
-            this.Close();
         }
-        private void BTN_CANCEL_CLICK(object sender, EventArgs e)
+        private void CLOSE(object sender, EventArgs e)
         {
             EVENTS.LOG_MESSAGE(1, "ENTER");
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
             this.Close();
         }
-        private void BTN_BROWSE_KEYENCE_Click(object sender, EventArgs e)
+        private void BTN_BROWSE_KEYENCE_CLICK(object sender, EventArgs e)
         {
+            EVENTS.LOG_MESSAGE(1, "ENTER");
             OpenFileDialog FILE_PATH_BROWSER = new OpenFileDialog();
             FILE_PATH_BROWSER.InitialDirectory = Properties.Misc.Default.KEYENCE_FOLDER;
             FILE_PATH_BROWSER.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
@@ -315,10 +307,21 @@ namespace TyrannosaurusPlex
                 KEYENCE_CSV = FILE_PATH_BROWSER.FileName;
                 TXT_BOX_KEYENCE.Text = KEYENCE_CSV;
             }
-
+            bool IS_VALID = CHECK_IF_CSV_IS_VALID();
+            if (IS_VALID)
+                LOAD_CSV_DATA(null, null);
+            else
+            {
+                EVENTS.LOG_MESSAGE(1, "EXIT_FAIL");
+            }
+            EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
         }
-        private void BTN_PREVIEW_CLICK(object sender, EventArgs e)
+        private void LOAD_CSV_DATA(object sender, EventArgs e)
         {
+            EVENTS.LOG_MESSAGE(1, "ENTER");
+            bool IS_VALID = CHECK_IF_CSV_IS_VALID();
+            if (!IS_VALID)
+                return;
             TABLE KEYENCE_PROCESSOR = new TABLE();
             DataTable GRID_DATA = new DataTable();
             DataTable INSTRUCTIONS = new DataTable();
@@ -338,13 +341,14 @@ namespace TyrannosaurusPlex
                 COLUMN.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
             GRP_BOX_COLUMN_ASSIGNERS.Enabled = true;
+            EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
         }
         private void BTN_CLICK(object sender, EventArgs e)
         {
             //This is sloppy but I'm just gonna make assignments and use the column header text to track whats what. Just like a CompSci 101 student would.
             //It'll work. It's Friday and I was up all night with the baby. I'll probably be disgusted with myself when I'm well rested but I'm doing it.
             //Backend work in a frontend class...
-
+            EVENTS.LOG_MESSAGE(1, "ENTER");
             int INDEX = DGV1.CurrentCell.ColumnIndex; //Get the currently selected column index.
             Button SENDER = (Button)sender; //Cast the generic sender into a button object.
             int PRIOR_COLUMN = -1; //In case we need to undo a assignment.
@@ -361,55 +365,81 @@ namespace TyrannosaurusPlex
             if (PRIOR_COLUMN == INDEX)
                 return; //Escape out, this will effectively invert the column to a unselected state.
             DGV1.Columns[INDEX].HeaderText = SENDER.Text;
-            Color SELECTED_COLOR = new Color();
-            switch (SENDER.Text)
-            {
-                case ("A"):
-                    SELECTED_COLOR = ColorTranslator.FromHtml("#CC99C9");
-                    break;
-                case ("B"):
-                    SELECTED_COLOR = ColorTranslator.FromHtml("#9EC1CF");
-                    break;
-                case ("C"):
-                    SELECTED_COLOR = ColorTranslator.FromHtml("#9EE09E");
-                    break;
-                case ("D"):
-                    SELECTED_COLOR = ColorTranslator.FromHtml("#FDFD97");
-                    break;
-                case ("E"):
-                    SELECTED_COLOR = ColorTranslator.FromHtml("#FEB144");
-                    break;
-                case ("F"):
-                    SELECTED_COLOR = ColorTranslator.FromHtml("#FF6663");
-                    break;
-                case ("G"):
-                    SELECTED_COLOR = ColorTranslator.FromHtml("#CC99C9");
-                    break;
-                case ("H"):
-                    SELECTED_COLOR = ColorTranslator.FromHtml("#9EC1CF");
-                    break;
-                case ("I"):
-                    SELECTED_COLOR = ColorTranslator.FromHtml("#9EE09E");
-                    break;
-                case ("J"):
-                    SELECTED_COLOR = ColorTranslator.FromHtml("#FDFD97");
-                    break;
-                case ("K"):
-                    SELECTED_COLOR = ColorTranslator.FromHtml("#FEB144");
-                    break;
-                case ("L"):
-                    SELECTED_COLOR = ColorTranslator.FromHtml("#FF6663");
-                    break;
-                case ("M"):
-                    SELECTED_COLOR = ColorTranslator.FromHtml("#CC99C9");
-                    break;
-                case ("TimeStamp"):
-                    SELECTED_COLOR = Color.Pink;
-                    break;
-
-
-            }
-            DGV1.Columns[INDEX].DefaultCellStyle.BackColor = SELECTED_COLOR;
+            COLOR_DGV_COLUMNS();
         }
+        private bool CHECK_IF_CSV_IS_VALID()
+        {
+            EVENTS.LOG_MESSAGE(1, "ENTER");
+            if (!System.IO.File.Exists(TXT_BOX_KEYENCE.Text)) //If the file does not exist.
+            {
+                string MESSAGE = "The Keyence CSV file does not exist. Plese check filepath.";
+                MessageBox.Show(MESSAGE, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                EVENTS.LOG_MESSAGE(2, "EXCEPTION", MESSAGE);
+                EVENTS.LOG_MESSAGE(1, "EXIT_FAIL");
+                return false;
+            }
+            EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
+            return true;
+        }
+        private void COLOR_DGV_COLUMNS()
+        {
+            EVENTS.LOG_MESSAGE(1, "ENTER");
+            Color SELECTED_COLOR = new Color();
+            foreach(DataGridViewColumn COLUMN in DGV1.Columns)
+            {
+                EVENTS.LOG_MESSAGE(3, string.Format("Processing column {0} for highlighting.", COLUMN.Index));
+                switch (COLUMN.HeaderText)
+                {
+                    case ("A"):
+                        SELECTED_COLOR = ColorTranslator.FromHtml("#CC99C9");
+                        break;
+                    case ("B"):
+                        SELECTED_COLOR = ColorTranslator.FromHtml("#9EC1CF");
+                        break;
+                    case ("C"):
+                        SELECTED_COLOR = ColorTranslator.FromHtml("#9EE09E");
+                        break;
+                    case ("D"):
+                        SELECTED_COLOR = ColorTranslator.FromHtml("#FDFD97");
+                        break;
+                    case ("E"):
+                        SELECTED_COLOR = ColorTranslator.FromHtml("#FEB144");
+                        break;
+                    case ("F"):
+                        SELECTED_COLOR = ColorTranslator.FromHtml("#FF6663");
+                        break;
+                    case ("G"):
+                        SELECTED_COLOR = ColorTranslator.FromHtml("#CC99C9");
+                        break;
+                    case ("H"):
+                        SELECTED_COLOR = ColorTranslator.FromHtml("#9EC1CF");
+                        break;
+                    case ("I"):
+                        SELECTED_COLOR = ColorTranslator.FromHtml("#9EE09E");
+                        break;
+                    case ("J"):
+                        SELECTED_COLOR = ColorTranslator.FromHtml("#FDFD97");
+                        break;
+                    case ("K"):
+                        SELECTED_COLOR = ColorTranslator.FromHtml("#FEB144");
+                        break;
+                    case ("L"):
+                        SELECTED_COLOR = ColorTranslator.FromHtml("#FF6663");
+                        break;
+                    case ("M"):
+                        SELECTED_COLOR = ColorTranslator.FromHtml("#CC99C9");
+                        break;
+                    case ("TimeStamp"):
+                        SELECTED_COLOR = Color.Pink;
+                        break;
+                    default:
+                        SELECTED_COLOR = Color.White;
+                        break;
+                }
+                DGV1.Columns[COLUMN.Index].DefaultCellStyle.BackColor = SELECTED_COLOR;
+            }
+            EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
+        }
+
     }
 }

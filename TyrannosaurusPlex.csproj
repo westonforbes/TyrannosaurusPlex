@@ -65,12 +65,22 @@
     <Compile Include="FORM_MAIN\FORM_MAIN.Designer.cs">
       <DependentUpon>FORM_MAIN.cs</DependentUpon>
     </Compile>
+    <Compile Include="FORM_LOGS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FORM_LOGS.Designer.cs">
+      <DependentUpon>FORM_LOGS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FORM_MAIN\PARTIAL_OBJECTS_EVENTS.cs" />
     <Compile Include="FORM_MAIN\PARTIAL_KEY_LOGGER.cs" />
     <Compile Include="FORM_MAIN\PARTIAL_RECIPE_DB.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FORM_ADD_RECIPE.resx">
       <DependentUpon>FORM_ADD_RECIPE.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FORM_LOGS.resx">
+      <DependentUpon>FORM_LOGS.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FORM_MAIN\FORM_MAIN.resx">
       <DependentUpon>FORM_MAIN.cs</DependentUpon>

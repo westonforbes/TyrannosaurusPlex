@@ -57,6 +57,8 @@
             this.BTN_C = new System.Windows.Forms.Button();
             this.BTN_B = new System.Windows.Forms.Button();
             this.BTN_A = new System.Windows.Forms.Button();
+            this.BTN_RECORD = new System.Windows.Forms.Button();
+            this.BTN_RECORD_STOP = new System.Windows.Forms.Button();
             this.GRP_BOX_DATA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGV1)).BeginInit();
             this.GRP_BOX_COLUMN_ASSIGNERS.SuspendLayout();
@@ -95,7 +97,7 @@
             this.BTN_CANCEL.TabIndex = 3;
             this.BTN_CANCEL.Text = "Cancel";
             this.BTN_CANCEL.UseVisualStyleBackColor = true;
-            this.BTN_CANCEL.Click += new System.EventHandler(this.BTN_CANCEL_CLICK);
+            this.BTN_CANCEL.Click += new System.EventHandler(this.CLOSE);
             // 
             // LISTBOX_CHECKSHEET_TYPE
             // 
@@ -136,7 +138,7 @@
             this.BTN_BROWSE_KEYENCE.TabIndex = 8;
             this.BTN_BROWSE_KEYENCE.Text = "Browse";
             this.BTN_BROWSE_KEYENCE.UseVisualStyleBackColor = true;
-            this.BTN_BROWSE_KEYENCE.Click += new System.EventHandler(this.BTN_BROWSE_KEYENCE_Click);
+            this.BTN_BROWSE_KEYENCE.Click += new System.EventHandler(this.BTN_BROWSE_KEYENCE_CLICK);
             // 
             // GRP_BOX_DATA
             // 
@@ -173,7 +175,7 @@
             this.BTN_PREVIEW.TabIndex = 107;
             this.BTN_PREVIEW.Text = "Preview Data";
             this.BTN_PREVIEW.UseVisualStyleBackColor = true;
-            this.BTN_PREVIEW.Click += new System.EventHandler(this.BTN_PREVIEW_CLICK);
+            this.BTN_PREVIEW.Click += new System.EventHandler(this.LOAD_CSV_DATA);
             // 
             // GRP_BOX_COLUMN_ASSIGNERS
             // 
@@ -338,11 +340,31 @@
             this.BTN_A.UseVisualStyleBackColor = true;
             this.BTN_A.Click += new System.EventHandler(this.BTN_CLICK);
             // 
+            // BTN_RECORD
+            // 
+            this.BTN_RECORD.Location = new System.Drawing.Point(15, 355);
+            this.BTN_RECORD.Name = "BTN_RECORD";
+            this.BTN_RECORD.Size = new System.Drawing.Size(100, 30);
+            this.BTN_RECORD.TabIndex = 109;
+            this.BTN_RECORD.Text = "Train Fields";
+            this.BTN_RECORD.UseVisualStyleBackColor = true;
+            // 
+            // BTN_RECORD_STOP
+            // 
+            this.BTN_RECORD_STOP.Location = new System.Drawing.Point(15, 390);
+            this.BTN_RECORD_STOP.Name = "BTN_RECORD_STOP";
+            this.BTN_RECORD_STOP.Size = new System.Drawing.Size(100, 30);
+            this.BTN_RECORD_STOP.TabIndex = 111;
+            this.BTN_RECORD_STOP.Text = "Stop Training";
+            this.BTN_RECORD_STOP.UseVisualStyleBackColor = true;
+            // 
             // FORM_ADD_RECIPE
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(606, 454);
+            this.Controls.Add(this.BTN_RECORD_STOP);
+            this.Controls.Add(this.BTN_RECORD);
             this.Controls.Add(this.GRP_BOX_COLUMN_ASSIGNERS);
             this.Controls.Add(this.BTN_PREVIEW);
             this.Controls.Add(this.GRP_BOX_DATA);
@@ -355,7 +377,10 @@
             this.Controls.Add(this.BTN_SAVE);
             this.Controls.Add(this.LBL_PART_NUM);
             this.Controls.Add(this.TXT_BOX_PART_NUM);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FORM_ADD_RECIPE";
             this.Text = "Add Recipe";
             this.GRP_BOX_DATA.ResumeLayout(false);
@@ -395,5 +420,7 @@
         private System.Windows.Forms.Button BTN_B;
         private System.Windows.Forms.Button BTN_A;
         private System.Windows.Forms.Button BTN_TIMESTAMP;
+        private System.Windows.Forms.Button BTN_RECORD;
+        private System.Windows.Forms.Button BTN_RECORD_STOP;
     }
 }
