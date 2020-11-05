@@ -3,3 +3,6 @@
 				preventing SQL injections. Backup save before trying to break off SQL functions into its own library.
 2020-11-02-03 - Moved backend functions over to dll, as I am sure I'll use them in the future.
 2020-11-03-01 - Lots of changes. Lots of code cleanup.
+2020-11-05-01 - Disabled the ability to edit part number or checksheet type when calling the add/edit form with the edit button. Changes were made in form constructor.
+				Started working on moving the keylogger over to the add/edit form.
+				Added a independent TODO text file.

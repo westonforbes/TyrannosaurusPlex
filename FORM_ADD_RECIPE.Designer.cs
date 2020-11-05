@@ -348,6 +348,7 @@
             this.BTN_RECORD.TabIndex = 109;
             this.BTN_RECORD.Text = "Train Fields";
             this.BTN_RECORD.UseVisualStyleBackColor = true;
+            this.BTN_RECORD.Click += new System.EventHandler(this.BTN_RECORD_CLICK);
             // 
             // BTN_RECORD_STOP
             // 

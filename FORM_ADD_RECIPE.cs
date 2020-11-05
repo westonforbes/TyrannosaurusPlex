@@ -17,6 +17,11 @@ namespace TyrannosaurusPlex
     {
         //Events, Delegates, Handlers
         public event EventHandler DATA_READY; //Create a EventHandler Delegate that we can invoke.
+        List<string> SEQUENCE_LIST = new List<string> { }; //Key data in list.
+        DataTable SEQUENCE_DATATABLE = new DataTable(); //Key data DataTable.
+        private bool RECORD_SEQUENCE_ACTIVE = false;
+        private bool REPLAY_SEQUENCE_ACTIVE = false;
+        DataTable INJECTION_TABLE = new DataTable();
 
         //Objects
         private LOGGER EVENTS = new LOGGER("Add Recipe Form Log");
@@ -53,12 +58,31 @@ namespace TyrannosaurusPlex
 
             //If this form is being created as a edit recipe, rather than a new recipe...
             if (CURRENT_RECIPE_DATA != null)
+            {
                 LOAD_IN_EDIT_DATA(CURRENT_RECIPE_DATA);
-
+                TXT_BOX_PART_NUM.Enabled = false;
+                LISTBOX_CHECKSHEET_TYPE.Enabled = false;
+            }
+            KEY_LOGGER.KEY_PRESSED += new EventHandler(KEY_LOGGER_KEY_PRESSED_EVENT);
             FORM_MAIN.OK_TO_CLOSE_ADD_RECIPE_FORM += new EventHandler(CLOSE);
         }
 
         //Methods
+        private void KEY_LOGGER_KEY_PRESSED_EVENT(object sender, EventArgs e) //Event setup in KEY_LOGGER_SETUP.
+        {
+            if (RECORD_SEQUENCE_ACTIVE) //If the record sequence is active...
+            {
+                SEQUENCE_LIST.Add((string)sender); //Add the key to the sequence.
+                SEQUENCE_DATATABLE.Rows.Add((string)sender); //Add the key to the sequence.
+            }
+            else if (REPLAY_SEQUENCE_ACTIVE) //Check if the replay sequence is active (and record is not active due to "else").
+            {
+                if ((string)sender == "{INSERT}")
+                    //REPLAY(SEQUENCE_LIST, INJECTION_TABLE);
+                if ((string)sender == "{ESC}")
+                    //REPLAY_SEQUENCE_STOP(null, null);
+            }
+        }
         private void LOAD_IN_EDIT_DATA(RECIPE_DATA CURRENT_RECIPE_DATA)
         {
             EVENTS.LOG_MESSAGE(1, "ENTER");
@@ -440,6 +464,9 @@ namespace TyrannosaurusPlex
             }
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
         }
-
+        private void BTN_RECORD_CLICK(object sender, EventArgs e)
+        {
+            KEY_LOGGER.START_KEY_LOGGER();
+        }
     }
 }
