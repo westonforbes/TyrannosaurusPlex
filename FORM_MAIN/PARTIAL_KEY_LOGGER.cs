@@ -61,7 +61,7 @@ namespace TyrannosaurusPlex
         }
         private void KEY_LOGGER_PAUSE(object sender, EventArgs e) //Not currently used.
         {
-            KEY_LOGGER.PAUSE_KEY_LOGGER();
+            KEY_LOGGER.STOP_KEY_LOGGER();
         }
         private void KEY_LOGGER_CLEAR(object sender, EventArgs e) //Not currently used.
         {
@@ -81,7 +81,7 @@ namespace TyrannosaurusPlex
             BTN_RECORD_START.Enabled = true;
             BTN_RECORD_STOP.Enabled = false;
             RECORD_SEQUENCE_ACTIVE = false;
-            KEY_LOGGER.PAUSE_KEY_LOGGER();
+            KEY_LOGGER.STOP_KEY_LOGGER();
         }
         private void REPLAY_SEQUENCE_START(object sender, EventArgs e)
         {

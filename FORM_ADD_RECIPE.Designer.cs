@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FORM_ADD_RECIPE));
             this.TXT_BOX_PART_NUM = new System.Windows.Forms.TextBox();
             this.LBL_PART_NUM = new System.Windows.Forms.Label();
@@ -57,11 +59,16 @@
             this.BTN_C = new System.Windows.Forms.Button();
             this.BTN_B = new System.Windows.Forms.Button();
             this.BTN_A = new System.Windows.Forms.Button();
-            this.BTN_RECORD = new System.Windows.Forms.Button();
+            this.BTN_RECORD_START = new System.Windows.Forms.Button();
             this.BTN_RECORD_STOP = new System.Windows.Forms.Button();
+            this.BTN_REPLAY = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.GRP_BOX_DATA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGV1)).BeginInit();
             this.GRP_BOX_COLUMN_ASSIGNERS.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
             // TXT_BOX_PART_NUM
@@ -340,15 +347,15 @@
             this.BTN_A.UseVisualStyleBackColor = true;
             this.BTN_A.Click += new System.EventHandler(this.BTN_CLICK);
             // 
-            // BTN_RECORD
+            // BTN_RECORD_START
             // 
-            this.BTN_RECORD.Location = new System.Drawing.Point(15, 355);
-            this.BTN_RECORD.Name = "BTN_RECORD";
-            this.BTN_RECORD.Size = new System.Drawing.Size(100, 30);
-            this.BTN_RECORD.TabIndex = 109;
-            this.BTN_RECORD.Text = "Train Fields";
-            this.BTN_RECORD.UseVisualStyleBackColor = true;
-            this.BTN_RECORD.Click += new System.EventHandler(this.BTN_RECORD_CLICK);
+            this.BTN_RECORD_START.Location = new System.Drawing.Point(15, 355);
+            this.BTN_RECORD_START.Name = "BTN_RECORD_START";
+            this.BTN_RECORD_START.Size = new System.Drawing.Size(100, 30);
+            this.BTN_RECORD_START.TabIndex = 109;
+            this.BTN_RECORD_START.Text = "Train Fields";
+            this.BTN_RECORD_START.UseVisualStyleBackColor = true;
+            this.BTN_RECORD_START.Click += new System.EventHandler(this.RECORD_SEQUENCE_START);
             // 
             // BTN_RECORD_STOP
             // 
@@ -358,14 +365,62 @@
             this.BTN_RECORD_STOP.TabIndex = 111;
             this.BTN_RECORD_STOP.Text = "Stop Training";
             this.BTN_RECORD_STOP.UseVisualStyleBackColor = true;
+            this.BTN_RECORD_STOP.Click += new System.EventHandler(this.RECORD_SEQUENCE_STOP);
+            // 
+            // BTN_REPLAY
+            // 
+            this.BTN_REPLAY.Location = new System.Drawing.Point(15, 245);
+            this.BTN_REPLAY.Name = "BTN_REPLAY";
+            this.BTN_REPLAY.Size = new System.Drawing.Size(100, 30);
+            this.BTN_REPLAY.TabIndex = 112;
+            this.BTN_REPLAY.Text = "Replay";
+            this.BTN_REPLAY.UseVisualStyleBackColor = true;
+            this.BTN_REPLAY.Click += new System.EventHandler(this.REPLAY_SEQUENCE_START);
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(623, 130);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Sunken;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.dataGridView1.Size = new System.Drawing.Size(170, 235);
+            this.dataGridView1.TabIndex = 100;
+            // 
+            // dataGridView2
+            // 
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Location = new System.Drawing.Point(799, 130);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Sunken;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView2.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.dataGridView2.Size = new System.Drawing.Size(170, 235);
+            this.dataGridView2.TabIndex = 113;
             // 
             // FORM_ADD_RECIPE
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(606, 454);
+            this.ClientSize = new System.Drawing.Size(901, 454);
+            this.Controls.Add(this.dataGridView2);
+            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.BTN_REPLAY);
             this.Controls.Add(this.BTN_RECORD_STOP);
-            this.Controls.Add(this.BTN_RECORD);
+            this.Controls.Add(this.BTN_RECORD_START);
             this.Controls.Add(this.GRP_BOX_COLUMN_ASSIGNERS);
             this.Controls.Add(this.BTN_PREVIEW);
             this.Controls.Add(this.GRP_BOX_DATA);
@@ -387,6 +442,8 @@
             this.GRP_BOX_DATA.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.DGV1)).EndInit();
             this.GRP_BOX_COLUMN_ASSIGNERS.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -421,7 +478,10 @@
         private System.Windows.Forms.Button BTN_B;
         private System.Windows.Forms.Button BTN_A;
         private System.Windows.Forms.Button BTN_TIMESTAMP;
-        private System.Windows.Forms.Button BTN_RECORD;
+        private System.Windows.Forms.Button BTN_RECORD_START;
         private System.Windows.Forms.Button BTN_RECORD_STOP;
+        private System.Windows.Forms.Button BTN_REPLAY;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridView2;
     }
 }

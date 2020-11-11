@@ -63,26 +63,16 @@ namespace TyrannosaurusPlex
                 TXT_BOX_PART_NUM.Enabled = false;
                 LISTBOX_CHECKSHEET_TYPE.Enabled = false;
             }
-            KEY_LOGGER.KEY_PRESSED += new EventHandler(KEY_LOGGER_KEY_PRESSED_EVENT);
+            KEY_LOGGER_SETUP();
             FORM_MAIN.OK_TO_CLOSE_ADD_RECIPE_FORM += new EventHandler(CLOSE);
         }
 
         //Methods
-        private void KEY_LOGGER_KEY_PRESSED_EVENT(object sender, EventArgs e) //Event setup in KEY_LOGGER_SETUP.
-        {
-            if (RECORD_SEQUENCE_ACTIVE) //If the record sequence is active...
-            {
-                SEQUENCE_LIST.Add((string)sender); //Add the key to the sequence.
-                SEQUENCE_DATATABLE.Rows.Add((string)sender); //Add the key to the sequence.
-            }
-            else if (REPLAY_SEQUENCE_ACTIVE) //Check if the replay sequence is active (and record is not active due to "else").
-            {
-                if ((string)sender == "{INSERT}")
-                    //REPLAY(SEQUENCE_LIST, INJECTION_TABLE);
-                if ((string)sender == "{ESC}")
-                    //REPLAY_SEQUENCE_STOP(null, null);
-            }
-        }
+        /// <summary>
+        /// This method is called when the form loads and it is determined to be a "edit recipe" call rather than a "new recipe call".
+        /// The method loads in passed data into all the form objects.
+        /// </summary>
+        /// <param name="CURRENT_RECIPE_DATA">Recipe data to load into the form fields.</param>
         private void LOAD_IN_EDIT_DATA(RECIPE_DATA CURRENT_RECIPE_DATA)
         {
             EVENTS.LOG_MESSAGE(1, "ENTER");
@@ -135,6 +125,16 @@ namespace TyrannosaurusPlex
             COLOR_DGV_COLUMNS();
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
         }
+        
+        /// <summary>
+        /// This method checks that the part number entered in TXT_BOX_PART_NUM is a valid ASPC part number.
+        /// </summary>
+        /// <returns>
+        /// <para>0: Part number is valid.</para>
+        /// <para>1: Part number is not 6 characters long.</para>
+        /// <para>2: A non-alpha character was detected in the first two characters.</para>
+        /// <para>3: A non-numeric character was detected in the last four characters.</para>
+        /// </returns>
         private int VALIDATE_PART_NUMBER()
         {
             EVENTS.LOG_MESSAGE(1, "ENTER");
@@ -464,9 +464,145 @@ namespace TyrannosaurusPlex
             }
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
         }
-        private void BTN_RECORD_CLICK(object sender, EventArgs e)
+
+
+
+        //Keylogger Methods
+
+        /// <summary>
+        /// This is a psuedo-constructor for setting up data for all methods related to key logging.
+        /// Its broken off into its own method for organizations sake.
+        /// </summary>
+        private void KEY_LOGGER_SETUP()
+        {
+            KEY_LOGGER.KEY_PRESSED += new EventHandler(KEY_LOGGER_KEY_PRESSED_EVENT);
+            SEQUENCE_DATATABLE.Columns.Add("Keys");
+            BTN_RECORD_STOP.Enabled = false;
+            INJECTION_TABLE.Columns.Add("Letter", typeof(string));
+            INJECTION_TABLE.Columns.Add("Value", typeof(string));
+            for (int i = 65; i <= 90; i++)
+            {
+                INJECTION_TABLE.Rows.Add((char)i, "");
+            }
+            dataGridView1.DataSource = INJECTION_TABLE;
+            dataGridView2.DataSource = SEQUENCE_DATATABLE;
+            BTN_REPLAY.Enabled = !RECORD_SEQUENCE_ACTIVE;
+        }
+
+        /// <summary>
+        /// This method is called every time a key is pressed while the key logger is on.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void KEY_LOGGER_KEY_PRESSED_EVENT(object sender, EventArgs e)
+        {
+            
+            if (RECORD_SEQUENCE_ACTIVE) //If the record sequence is active...
+            {
+                SEQUENCE_LIST.Add((string)sender); //Add the key to the sequence.
+                SEQUENCE_DATATABLE.Rows.Add((string)sender); //Add the key to the sequence.
+            }
+            else if (REPLAY_SEQUENCE_ACTIVE) //Check if the replay sequence is active (and record is not active due to "else").
+            {
+                if ((string)sender == "{INSERT}")
+                    REPLAY(SEQUENCE_LIST, INJECTION_TABLE);
+                if ((string)sender == "{ESC}")
+                    REPLAY_SEQUENCE_STOP(null, null);
+            }
+        }
+
+        /// <summary>
+        /// This method simulates a keyboard user and replays the keys sent to it. This method substitutes letters for data in TABLE_TO_INJECT.
+        /// For instance, if there is a "A" character in the PASSED_SEQUENCE, the method will look for row "A" in the DataTable and output the value into the keystream.
+        /// </summary>
+        /// <param name="PASSED_SEQUENCE">Each string in this list needs to be a valid keycode.</param>
+        /// <param name="TABLE_TO_INJECT">This table must have a column named "Letter" and a column named "Value".</param>
+        private void REPLAY(List<string> PASSED_SEQUENCE, DataTable TABLE_TO_INJECT)
+        {
+            RECORD_SEQUENCE_STOP(null, null); //Ensure the recording has stopped.
+            SendKeys.Flush(); //Wait for the buffer to empty.
+            foreach (string KEY in PASSED_SEQUENCE) //For each key in the recorded sequence...
+            {
+                bool IS_CHAR = Char.IsLetterOrDigit(KEY, 0); //Check if its a letter.
+                if (IS_CHAR) //If the key is a letter, this is an indication that substitution needs to happen...
+                {
+                    foreach (DataRow ROW in TABLE_TO_INJECT.Rows) //Cycle through the table to find the right row.
+                    {
+                        string ROW_LETTER = ROW["Letter"].ToString(); //Get the current row letter.
+                        if (KEY.ToUpper() == ROW_LETTER) //If the row letter matches the letter from the key stream...
+                        {
+                            foreach (char CHARACTER in ROW["Value"].ToString()) //for each character in the value field, send the key.
+                            {
+                                SendKeys.SendWait(CHARACTER.ToString());
+                                System.Threading.Thread.Sleep(75); //Delay a bit.
+                            }
+                        }
+                    }
+                }
+                else //The key is not a letter...
+                {
+                    SendKeys.SendWait(KEY); //Just send the key.
+                }
+                System.Threading.Thread.Sleep(75); //Delay a bit.
+            }
+            System.Threading.Thread.Sleep(75); //Delay a bit.
+            SendKeys.SendWait("{INSERT}"); //Turn INSERT back off.
+            REPLAY_SEQUENCE_ACTIVE = false; //Indicate the sequence is done.
+        }
+
+        /// <summary>
+        /// This method will start the key logger. Keys will be recorded when the KEY_PRESSED event is raised.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RECORD_SEQUENCE_START(object sender, EventArgs e)
         {
             KEY_LOGGER.START_KEY_LOGGER();
+            BTN_RECORD_START.Enabled = false;
+            BTN_RECORD_STOP.Enabled = true;
+            SEQUENCE_LIST.Clear();
+            SEQUENCE_DATATABLE.Clear();
+            RECORD_SEQUENCE_ACTIVE = true;
+            BTN_REPLAY.Enabled = !RECORD_SEQUENCE_ACTIVE;
         }
+
+        /// <summary>
+        /// This method will stop the key logger record session.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RECORD_SEQUENCE_STOP(object sender, EventArgs e)
+        {
+            BTN_RECORD_START.Enabled = true;
+            BTN_RECORD_STOP.Enabled = false;
+            RECORD_SEQUENCE_ACTIVE = false;
+            KEY_LOGGER.STOP_KEY_LOGGER();
+            BTN_REPLAY.Enabled = !RECORD_SEQUENCE_ACTIVE;
+        }
+
+        /// <summary>
+        /// This method will start the replay sequence. All it does is set a flag bit,
+        /// as the real startup of the replay sequence is handled by the KEY_LOGGER_KEY_PRESSED_EVENT method
+        /// once the user presses the insert key.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void REPLAY_SEQUENCE_START(object sender, EventArgs e)
+        {
+            KEY_LOGGER.START_KEY_LOGGER();
+            REPLAY_SEQUENCE_ACTIVE = true;
+        }
+
+        /// <summary>
+        /// This method turns off the REPLAY_SEQUENCE_ACTIVE flag and stops the keylogger.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void REPLAY_SEQUENCE_STOP(object sender, EventArgs e)
+        {
+            KEY_LOGGER.STOP_KEY_LOGGER();
+            REPLAY_SEQUENCE_ACTIVE = false;
+        }
+
     }
 }
