@@ -26,6 +26,7 @@ namespace TyrannosaurusPlex
         //Objects
         private LOGGER EVENTS = new LOGGER("Add Recipe Form Log");
         private string KEYENCE_CSV;
+        
 
         //Constructor
         public FORM_ADD_RECIPE(DataTable CHECKSHEET_TYPE_DATA_TABLE, RECIPE_DATA CURRENT_RECIPE_DATA = null)
@@ -68,6 +69,7 @@ namespace TyrannosaurusPlex
         }
 
         //Methods
+
         /// <summary>
         /// This method is called when the form loads and it is determined to be a "edit recipe" call rather than a "new recipe call".
         /// The method loads in passed data into all the form objects.
@@ -125,55 +127,14 @@ namespace TyrannosaurusPlex
             COLOR_DGV_COLUMNS();
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
         }
-        
-        /// <summary>
-        /// This method checks that the part number entered in TXT_BOX_PART_NUM is a valid ASPC part number.
-        /// </summary>
-        /// <returns>
-        /// <para>0: Part number is valid.</para>
-        /// <para>1: Part number is not 6 characters long.</para>
-        /// <para>2: A non-alpha character was detected in the first two characters.</para>
-        /// <para>3: A non-numeric character was detected in the last four characters.</para>
-        /// </returns>
-        private int VALIDATE_PART_NUMBER()
-        {
-            EVENTS.LOG_MESSAGE(1, "ENTER");
-            string TEXT = TXT_BOX_PART_NUM.Text.ToUpper(); //Capitalize the text.
-            if (TEXT.Length != 6) //Any ASPC part number should be six digits...
-            {
-                EVENTS.LOG_MESSAGE(2, "Part number needs to be 6 characters long.");
-                EVENTS.LOG_MESSAGE(1, "EXIT_FAIL");
-                return 1;
-            }
-            string COMPANY_CODE = TEXT.Substring(0, 2); //Extract the company code digits.
-            string NUMERIC_CODE = TEXT.Substring(2, 4); //Extract the numeric code.
-            if (!Regex.IsMatch(COMPANY_CODE, @"^[a-zA-Z]+$")) //Check that the company code is only letters, if its not...
-            {
-                EVENTS.LOG_MESSAGE(2, "Non-alpha character detected in company code.");
-                EVENTS.LOG_MESSAGE(1, "EXIT_FAIL");
-                return 2;
-            }
-            foreach (char CHARACTER in NUMERIC_CODE) //For each character in the numeric code...
-            {
-                if (CHARACTER < '0' || CHARACTER > '9') //Check its ascii value, if it lies on either side of the numeric set, the data is no good.
-                {
-                    EVENTS.LOG_MESSAGE(2, "Non-numeric character detected in numeric part of part number.");
-                    EVENTS.LOG_MESSAGE(1, "EXIT_FAIL");
-                    return 3;
-                }
-            }
-            EVENTS.LOG_MESSAGE(2, "Part number valid."); //If all the above checks passed, the part number is good.
-            EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
-            TXT_BOX_PART_NUM.Text = TEXT; //Reinsert the capitalized version of the part number into the text field.
-            return 0;
-
-        }
         private void BTN_SAVE_CLICK(object sender, EventArgs e)
         {
             EVENTS.LOG_MESSAGE(1, "ENTER");
 
             //Check the part number is good----------------------------------------------------------------------
-            int RESULT = VALIDATE_PART_NUMBER();
+            string TEXT = TXT_BOX_PART_NUM.Text; //Get the canidate string from the textbox.
+            int RESULT = BACKEND.VALIDATE_PART_NUMBER(ref TEXT); //Check the string validity.
+            TXT_BOX_PART_NUM.Text = TEXT; //Reassign the string to the textbox so its capitalized.
             if (RESULT != 0) //If VALIDATE_PART_NUMBER did not execute successfully...
             {
                 string MESSAGE = null;
@@ -214,7 +175,7 @@ namespace TyrannosaurusPlex
             }
 
             //Check if the keyence csv path is valid-------------------------------------------------------------
-            bool IS_CSV_VALID = CHECK_IF_CSV_IS_VALID();
+            bool IS_CSV_VALID = BACKEND.VALIDATE_FILE(TXT_BOX_KEYENCE.Text);
             if (!IS_CSV_VALID)
                 return;
 
@@ -331,7 +292,7 @@ namespace TyrannosaurusPlex
                 KEYENCE_CSV = FILE_PATH_BROWSER.FileName;
                 TXT_BOX_KEYENCE.Text = KEYENCE_CSV;
             }
-            bool IS_VALID = CHECK_IF_CSV_IS_VALID();
+            bool IS_VALID = BACKEND.VALIDATE_FILE(TXT_BOX_KEYENCE.Text);
             if (IS_VALID)
                 LOAD_CSV_DATA(null, null);
             else
@@ -343,7 +304,7 @@ namespace TyrannosaurusPlex
         private void LOAD_CSV_DATA(object sender, EventArgs e)
         {
             EVENTS.LOG_MESSAGE(1, "ENTER");
-            bool IS_VALID = CHECK_IF_CSV_IS_VALID();
+            bool IS_VALID = BACKEND.VALIDATE_FILE(TXT_BOX_KEYENCE.Text);
             if (!IS_VALID)
                 return;
             TABLE KEYENCE_PROCESSOR = new TABLE();
@@ -390,20 +351,6 @@ namespace TyrannosaurusPlex
                 return; //Escape out, this will effectively invert the column to a unselected state.
             DGV1.Columns[INDEX].HeaderText = SENDER.Text;
             COLOR_DGV_COLUMNS();
-        }
-        private bool CHECK_IF_CSV_IS_VALID()
-        {
-            EVENTS.LOG_MESSAGE(1, "ENTER");
-            if (!System.IO.File.Exists(TXT_BOX_KEYENCE.Text)) //If the file does not exist.
-            {
-                string MESSAGE = "The Keyence CSV file does not exist. Plese check filepath.";
-                MessageBox.Show(MESSAGE, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                EVENTS.LOG_MESSAGE(2, "EXCEPTION", MESSAGE);
-                EVENTS.LOG_MESSAGE(1, "EXIT_FAIL");
-                return false;
-            }
-            EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
-            return true;
         }
         private void COLOR_DGV_COLUMNS()
         {
@@ -478,12 +425,7 @@ namespace TyrannosaurusPlex
             KEY_LOGGER.KEY_PRESSED += new EventHandler(KEY_LOGGER_KEY_PRESSED_EVENT);
             SEQUENCE_DATATABLE.Columns.Add("Keys");
             BTN_RECORD_STOP.Enabled = false;
-            INJECTION_TABLE.Columns.Add("Letter", typeof(string));
-            INJECTION_TABLE.Columns.Add("Value", typeof(string));
-            for (int i = 65; i <= 90; i++)
-            {
-                INJECTION_TABLE.Rows.Add((char)i, "");
-            }
+            INJECTION_TABLE = BACKEND.CREATE_INJECTION_TABLE(); //Properly format the injection table. 
             dataGridView1.DataSource = INJECTION_TABLE;
             dataGridView2.DataSource = SEQUENCE_DATATABLE;
             BTN_REPLAY.Enabled = !RECORD_SEQUENCE_ACTIVE;
@@ -602,6 +544,14 @@ namespace TyrannosaurusPlex
         {
             KEY_LOGGER.STOP_KEY_LOGGER();
             REPLAY_SEQUENCE_ACTIVE = false;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //MOVE_CSV_DATA_INTO_INJECTION_TABLE(ref DGV1, INJECTION_TABLE);
+
+            int FART = (int)DGV1.DataSource;
+            Console.WriteLine(FART);
         }
 
     }

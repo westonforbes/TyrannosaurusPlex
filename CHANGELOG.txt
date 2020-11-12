@@ -7,3 +7,4 @@
 				Started working on moving the keylogger over to the add/edit form.
 				Added a independent TODO text file.
 2020-11-11-01 - Keylogging functionality added to the add/edit form. Still need to link to the actual csv data.
+				Started moving some finalized functions from the add/edit form into the class BACKEND because I realized they could be recycled elsewhere.
