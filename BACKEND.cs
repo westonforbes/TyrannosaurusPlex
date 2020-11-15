@@ -6,12 +6,36 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using FORBES;
+using FORBES.LOGGER_NAMESPACE;
+using FORBES.KEY_LOGGER_NAMESPACE;
 
 namespace TyrannosaurusPlex
 {
     public static class BACKEND
     {
+        /// <summary>
+        /// This function attempts to safely cast a DataGridViews source into a DataTable.
+        /// </summary>
+        /// <param name="DGV">The DGV to get the data from.</param>
+        /// <param name="DATA_TABLE">A DataTable to bind to.</param>
+        /// <returns>True on success, false on failure.</returns>
+        public static bool EXTRACT_DATA_TABLE_FROM_DGV(ref DataGridView DGV, ref DataTable DATA_TABLE)
+        {
+            EVENTS.LOG_MESSAGE(1, "ENTER");
+            try
+            {
+                DATA_TABLE = (DataTable)DGV.DataSource;
+            }
+            catch (InvalidCastException EX)
+            {
+                EVENTS.LOG_MESSAGE(2, "EXCEPTION", EX.Message);
+                EVENTS.LOG_MESSAGE(1, "EXIT_FAIL");
+                return false;
+            }
+            EVENTS.LOG_MESSAGE(2, "EXIT_SUCCESS");
+            return true;
+        }
+
         /// <summary>
         /// Event log for all backend methods.
         /// </summary>
@@ -145,6 +169,40 @@ namespace TyrannosaurusPlex
             return INJECTION_TABLE;
         }
 
-
+        /// <summary>
+        /// This method simulates a keyboard user and replays the keys sent to it. This method substitutes letters for data in TABLE_TO_INJECT.
+        /// For instance, if there is a "A" character in the PASSED_SEQUENCE, the method will look for row "A" in the DataTable and output the value into the keystream.
+        /// Be sure to stop recording before running this method.
+        /// </summary>
+        /// <param name="PASSED_SEQUENCE">Each string in this list needs to be a valid keycode.</param>
+        /// <param name="TABLE_TO_INJECT">This table must be formatted properly, use the function CREATE_INJECTON_TABLE to make a proper table.</param>
+        public static void REPLAY(List<string> PASSED_SEQUENCE, DataTable TABLE_TO_INJECT)
+        {
+            SendKeys.Flush(); //Wait for the buffer to empty.
+            foreach (string KEY in PASSED_SEQUENCE) //For each key in the recorded sequence...
+            {
+                bool IS_CHAR = Char.IsLetterOrDigit(KEY, 0); //Check if its a letter.
+                if (IS_CHAR) //If the key is a letter, this is an indication that substitution needs to happen...
+                {
+                    foreach (DataRow ROW in TABLE_TO_INJECT.Rows) //Cycle through the table to find the right row.
+                    {
+                        string ROW_LETTER = ROW["Letter"].ToString(); //Get the current row letter.
+                        if (KEY.ToUpper() == ROW_LETTER) //If the row letter matches the letter from the key stream...
+                        {
+                            foreach (char CHARACTER in ROW["Value"].ToString()) //for each character in the value field, send the key.
+                            {
+                                SendKeys.SendWait(CHARACTER.ToString());
+                                System.Threading.Thread.Sleep(75); //Delay a bit.
+                            }
+                        }
+                    }
+                }
+                else //The key is not a letter...
+                {
+                    SendKeys.SendWait(KEY); //Just send the key.
+                }
+                System.Threading.Thread.Sleep(75); //Delay a bit.
+            }
+        }
     }
 }

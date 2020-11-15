@@ -8,8 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using TABLE_PROCESSOR;
-using FORBES;
+using FORBES.LOGGER_NAMESPACE;
+using FORBES.KEY_LOGGER_NAMESPACE;
+using FORBES.TABLE_PROCESSOR_NAMESPACE;
 
 namespace TyrannosaurusPlex
 {
@@ -279,7 +280,7 @@ namespace TyrannosaurusPlex
             EVENTS.LOG_MESSAGE(1, "ENTER");
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
             this.Close();
-        }
+        } 
         private void BTN_BROWSE_KEYENCE_CLICK(object sender, EventArgs e)
         {
             EVENTS.LOG_MESSAGE(1, "ENTER");
@@ -301,19 +302,27 @@ namespace TyrannosaurusPlex
             }
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
         }
+
+        /// <summary>
+        /// This method loads CSV data in from the TXT_BOX_KEYENCE.Text and binds it to DGV1. It does some controls formatting as well.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LOAD_CSV_DATA(object sender, EventArgs e)
         {
             EVENTS.LOG_MESSAGE(1, "ENTER");
-            bool IS_VALID = BACKEND.VALIDATE_FILE(TXT_BOX_KEYENCE.Text);
-            if (!IS_VALID)
-                return;
-            TABLE KEYENCE_PROCESSOR = new TABLE();
-            DataTable GRID_DATA = new DataTable();
-            DataTable INSTRUCTIONS = new DataTable();
-            INSTRUCTIONS.Columns.Add();
-            INSTRUCTIONS.Rows.Add("CSV");
-            KEYENCE_PROCESSOR.PROCESS_INSTRUCTIONS(ref GRID_DATA, ref INSTRUCTIONS, TXT_BOX_KEYENCE.Text, ',', null, ',');
-            DGV1.DataSource = GRID_DATA;
+
+            //Load in data.
+            bool IS_VALID = BACKEND.VALIDATE_FILE(TXT_BOX_KEYENCE.Text); //Check to make sure the filepath is valid.
+            if (!IS_VALID) //If the file is not valid...
+                return; //Break out of method. VALIDATE_FILE method will notify user of problems.
+            TABLE_PROCESSOR KEYENCE_PROCESSOR = new TABLE_PROCESSOR(); //Create a table processor.
+            DataTable GRID_DATA = new DataTable(); //Create a datatable that will hold all the csv data.
+            DataTable INSTRUCTIONS = INSTRUCTION_SET.CREATE_INSTRUCTION_TABLE(); //We need to create a simple instruction table to load in the file.
+            KEYENCE_PROCESSOR.PROCESS_INSTRUCTIONS(ref GRID_DATA, ref INSTRUCTIONS, TXT_BOX_KEYENCE.Text, ',', null, ','); //Load in the data into GRID_DATA.
+            DGV1.DataSource = GRID_DATA; //Bind the DGV to the data. The DGV will be where we can pull the table from on future calls.
+            
+            //Format DGV.
             DGV1.RowHeadersVisible = false;
             DGV1.ColumnHeadersVisible = true;
             DGV1.ReadOnly = true;
@@ -325,9 +334,12 @@ namespace TyrannosaurusPlex
                 COLUMN.HeaderText = "";
                 COLUMN.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
+
+            //Enable controls for working with table.
             GRP_BOX_COLUMN_ASSIGNERS.Enabled = true;
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
         }
+
         private void BTN_CLICK(object sender, EventArgs e)
         {
             //This is sloppy but I'm just gonna make assignments and use the column header text to track whats what. Just like a CompSci 101 student would.
@@ -413,7 +425,6 @@ namespace TyrannosaurusPlex
         }
 
 
-
         //Keylogger Methods
 
         /// <summary>
@@ -447,49 +458,17 @@ namespace TyrannosaurusPlex
             else if (REPLAY_SEQUENCE_ACTIVE) //Check if the replay sequence is active (and record is not active due to "else").
             {
                 if ((string)sender == "{INSERT}")
-                    REPLAY(SEQUENCE_LIST, INJECTION_TABLE);
+                {
+                    RECORD_SEQUENCE_STOP(null,null);
+                    BACKEND.REPLAY(SEQUENCE_LIST, INJECTION_TABLE);
+                    System.Threading.Thread.Sleep(75); //Delay a bit.
+                    SendKeys.SendWait("{INSERT}"); //As the insert key is a latched key, we want to turn it back to its original state, so resend.
+                    REPLAY_SEQUENCE_ACTIVE = false;
+                }
+                    
                 if ((string)sender == "{ESC}")
                     REPLAY_SEQUENCE_STOP(null, null);
             }
-        }
-
-        /// <summary>
-        /// This method simulates a keyboard user and replays the keys sent to it. This method substitutes letters for data in TABLE_TO_INJECT.
-        /// For instance, if there is a "A" character in the PASSED_SEQUENCE, the method will look for row "A" in the DataTable and output the value into the keystream.
-        /// </summary>
-        /// <param name="PASSED_SEQUENCE">Each string in this list needs to be a valid keycode.</param>
-        /// <param name="TABLE_TO_INJECT">This table must have a column named "Letter" and a column named "Value".</param>
-        private void REPLAY(List<string> PASSED_SEQUENCE, DataTable TABLE_TO_INJECT)
-        {
-            RECORD_SEQUENCE_STOP(null, null); //Ensure the recording has stopped.
-            SendKeys.Flush(); //Wait for the buffer to empty.
-            foreach (string KEY in PASSED_SEQUENCE) //For each key in the recorded sequence...
-            {
-                bool IS_CHAR = Char.IsLetterOrDigit(KEY, 0); //Check if its a letter.
-                if (IS_CHAR) //If the key is a letter, this is an indication that substitution needs to happen...
-                {
-                    foreach (DataRow ROW in TABLE_TO_INJECT.Rows) //Cycle through the table to find the right row.
-                    {
-                        string ROW_LETTER = ROW["Letter"].ToString(); //Get the current row letter.
-                        if (KEY.ToUpper() == ROW_LETTER) //If the row letter matches the letter from the key stream...
-                        {
-                            foreach (char CHARACTER in ROW["Value"].ToString()) //for each character in the value field, send the key.
-                            {
-                                SendKeys.SendWait(CHARACTER.ToString());
-                                System.Threading.Thread.Sleep(75); //Delay a bit.
-                            }
-                        }
-                    }
-                }
-                else //The key is not a letter...
-                {
-                    SendKeys.SendWait(KEY); //Just send the key.
-                }
-                System.Threading.Thread.Sleep(75); //Delay a bit.
-            }
-            System.Threading.Thread.Sleep(75); //Delay a bit.
-            SendKeys.SendWait("{INSERT}"); //Turn INSERT back off.
-            REPLAY_SEQUENCE_ACTIVE = false; //Indicate the sequence is done.
         }
 
         /// <summary>

@@ -1,10 +1,22 @@
-﻿2020-11-02-01 - Initial commit.
+﻿CHANGELOG:
+2020-11-02-01 - Initial commit.
+
 2020-11-02-02 - Parameterizing the function EXECUTE_COMMAND as it struggles with the literal string of the csv filepath. This will have the additional benifit of
 				preventing SQL injections. Backup save before trying to break off SQL functions into its own library.
+
 2020-11-02-03 - Moved backend functions over to dll, as I am sure I'll use them in the future.
+
 2020-11-03-01 - Lots of changes. Lots of code cleanup.
+
 2020-11-05-01 - Disabled the ability to edit part number or checksheet type when calling the add/edit form with the edit button. Changes were made in form constructor.
+				
 				Started working on moving the keylogger over to the add/edit form.
+				
 				Added a independent TODO text file.
+
 2020-11-11-01 - Keylogging functionality added to the add/edit form. Still need to link to the actual csv data.
+				
 				Started moving some finalized functions from the add/edit form into the class BACKEND because I realized they could be recycled elsewhere.
+
+2020-11-12-01 - I made significant changes between FORBES library rev 2020-11-11-01 and FORBES library rev 2020-11-12-01. As such I had to perform a bunch of little changes in
+				this program to make it compatible. Still working on moving stuff to BACKEND and cleaning up slop before I work on actually storing key sequences.

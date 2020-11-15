@@ -2,7 +2,7 @@
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using FORBES;
+using FORBES.MYSQL_COMS_NAMESPACE;
 
 //VISUAL STUDIO DESIGNER BLOCKER-------------------------------------------------------------------------------------------------------------
 [System.ComponentModel.DesignerCategory("")] //Prevents Visual Studio from trying to open this file in Forms Designer. Not needed at runtime.
