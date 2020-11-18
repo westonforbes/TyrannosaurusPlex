@@ -85,7 +85,8 @@ namespace TyrannosaurusPlex
         }
 
         /// <summary>
-        /// This method moves data from a DataTable created in the image of the source CSV file into a injection table.
+        /// This method moves data from a DataTable created in the image of the source CSV file into a injection table. It sorts through column labels (A thru Z)
+        /// in the source table to figure out what goes where.
         /// </summary>
         /// <param name="SOURCE_CSV_TABLE"> This DataTable should be in the format of the CSV file but should have marked column names.</param>
         /// <param name="SOURCE_INJECTION_TABLE">This table must have a column named "Letter" and a column named "Value".
@@ -95,12 +96,15 @@ namespace TyrannosaurusPlex
             EVENTS.LOG_MESSAGE(1, "ENTER");
             foreach (DataColumn COLUMN in SOURCE_CSV_TABLE.Columns) //For each column...
             {
+                EVENTS.LOG_MESSAGE(3, string.Format("Evaluating source column {0}", COLUMN.Ordinal.ToString()));
+                EVENTS.LOG_MESSAGE(3, string.Format("Column name: {0}", COLUMN.ColumnName));
                 for (int i = (char)'A'; i <= (char)'Z'; i++) //Go through each letter...
                 {
                     char i_AS_CHAR = (char)i; //Convert incrementer to a character.
                     string i_AS_STRING = i_AS_CHAR.ToString(); //Convert incrementer character to string.
                     if (COLUMN.ColumnName == i_AS_STRING) //Check if the incrementer letter code is the same as the current column header text...
                     {
+                        EVENTS.LOG_MESSAGE(3, string.Format("Match between column {0} and iterator {1}.", COLUMN.Ordinal.ToString(), (char)i));
                         //Now that the proper column in the from the CSV data is selected, we need to find the last populated row.
                         //The last populated row should be the most recent entry.
                         for (int j = SOURCE_CSV_TABLE.Rows.Count - 1; j >= 0; j--) //Scan rows from last to first...

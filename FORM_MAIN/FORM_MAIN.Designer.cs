@@ -29,11 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FORM_MAIN));
-            this.DGV_INJECTION_TABLE = new System.Windows.Forms.DataGridView();
-            this.BTN_RECORD_START = new System.Windows.Forms.Button();
-            this.BTN_RECORD_STOP = new System.Windows.Forms.Button();
-            this.BTN_REPLAY_START = new System.Windows.Forms.Button();
-            this.GRPBOX_RECORD = new System.Windows.Forms.GroupBox();
             this.GRPBOX_DATABASE = new System.Windows.Forms.GroupBox();
             this.BTN_EDIT_RECIPE = new System.Windows.Forms.Button();
             this.BTN_DELETE_RECIPE = new System.Windows.Forms.Button();
@@ -44,62 +39,11 @@
             this.MENU_STRIP = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MENU_ITEM_TOOL_STRIP = new System.Windows.Forms.ToolStripMenuItem();
-            ((System.ComponentModel.ISupportInitialize)(this.DGV_INJECTION_TABLE)).BeginInit();
-            this.GRPBOX_RECORD.SuspendLayout();
+            this.button1 = new System.Windows.Forms.Button();
             this.GRPBOX_DATABASE.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGV_RECIPE_TABLE)).BeginInit();
             this.MENU_STRIP.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // DGV_INJECTION_TABLE
-            // 
-            this.DGV_INJECTION_TABLE.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DGV_INJECTION_TABLE.Location = new System.Drawing.Point(557, 80);
-            this.DGV_INJECTION_TABLE.Name = "DGV_INJECTION_TABLE";
-            this.DGV_INJECTION_TABLE.Size = new System.Drawing.Size(193, 313);
-            this.DGV_INJECTION_TABLE.TabIndex = 4;
-            // 
-            // BTN_RECORD_START
-            // 
-            this.BTN_RECORD_START.Location = new System.Drawing.Point(6, 19);
-            this.BTN_RECORD_START.Name = "BTN_RECORD_START";
-            this.BTN_RECORD_START.Size = new System.Drawing.Size(150, 25);
-            this.BTN_RECORD_START.TabIndex = 5;
-            this.BTN_RECORD_START.Text = "Record Key Sequence";
-            this.BTN_RECORD_START.UseVisualStyleBackColor = true;
-            this.BTN_RECORD_START.Click += new System.EventHandler(this.RECORD_SEQUENCE_START);
-            // 
-            // BTN_RECORD_STOP
-            // 
-            this.BTN_RECORD_STOP.Location = new System.Drawing.Point(6, 50);
-            this.BTN_RECORD_STOP.Name = "BTN_RECORD_STOP";
-            this.BTN_RECORD_STOP.Size = new System.Drawing.Size(150, 25);
-            this.BTN_RECORD_STOP.TabIndex = 6;
-            this.BTN_RECORD_STOP.Text = "Stop Record";
-            this.BTN_RECORD_STOP.UseVisualStyleBackColor = true;
-            this.BTN_RECORD_STOP.Click += new System.EventHandler(this.RECORD_SEQUENCE_STOP);
-            // 
-            // BTN_REPLAY_START
-            // 
-            this.BTN_REPLAY_START.Location = new System.Drawing.Point(6, 81);
-            this.BTN_REPLAY_START.Name = "BTN_REPLAY_START";
-            this.BTN_REPLAY_START.Size = new System.Drawing.Size(150, 25);
-            this.BTN_REPLAY_START.TabIndex = 7;
-            this.BTN_REPLAY_START.Text = "Replay Sequence";
-            this.BTN_REPLAY_START.UseVisualStyleBackColor = true;
-            this.BTN_REPLAY_START.Click += new System.EventHandler(this.REPLAY_SEQUENCE_START);
-            // 
-            // GRPBOX_RECORD
-            // 
-            this.GRPBOX_RECORD.Controls.Add(this.BTN_RECORD_START);
-            this.GRPBOX_RECORD.Controls.Add(this.BTN_REPLAY_START);
-            this.GRPBOX_RECORD.Controls.Add(this.BTN_RECORD_STOP);
-            this.GRPBOX_RECORD.Location = new System.Drawing.Point(574, 93);
-            this.GRPBOX_RECORD.Name = "GRPBOX_RECORD";
-            this.GRPBOX_RECORD.Size = new System.Drawing.Size(162, 235);
-            this.GRPBOX_RECORD.TabIndex = 8;
-            this.GRPBOX_RECORD.TabStop = false;
-            this.GRPBOX_RECORD.Text = "Record SPC Filler";
             // 
             // GRPBOX_DATABASE
             // 
@@ -110,7 +54,7 @@
             this.GRPBOX_DATABASE.Controls.Add(this.BTN_DISCONNECT);
             this.GRPBOX_DATABASE.Location = new System.Drawing.Point(12, 28);
             this.GRPBOX_DATABASE.Name = "GRPBOX_DATABASE";
-            this.GRPBOX_DATABASE.Size = new System.Drawing.Size(162, 235);
+            this.GRPBOX_DATABASE.Size = new System.Drawing.Size(162, 175);
             this.GRPBOX_DATABASE.TabIndex = 9;
             this.GRPBOX_DATABASE.TabStop = false;
             this.GRPBOX_DATABASE.Text = "Database Tools";
@@ -180,7 +124,7 @@
             this.MENU_ITEM_TOOL_STRIP});
             this.MENU_STRIP.Location = new System.Drawing.Point(0, 0);
             this.MENU_STRIP.Name = "MENU_STRIP";
-            this.MENU_STRIP.Size = new System.Drawing.Size(442, 24);
+            this.MENU_STRIP.Size = new System.Drawing.Size(430, 24);
             this.MENU_STRIP.TabIndex = 11;
             this.MENU_STRIP.Text = "Menu Strip";
             // 
@@ -197,22 +141,29 @@
             this.MENU_ITEM_TOOL_STRIP.Text = "Logs";
             this.MENU_ITEM_TOOL_STRIP.Click += new System.EventHandler(this.MENU_ITEM_TOOL_STRIP_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(15, 210);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(158, 52);
+            this.button1.TabIndex = 12;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // FORM_MAIN
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(442, 273);
+            this.ClientSize = new System.Drawing.Size(430, 270);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.DGV_RECIPE_TABLE);
             this.Controls.Add(this.GRPBOX_DATABASE);
-            this.Controls.Add(this.GRPBOX_RECORD);
-            this.Controls.Add(this.DGV_INJECTION_TABLE);
             this.Controls.Add(this.MENU_STRIP);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.MENU_STRIP;
             this.Name = "FORM_MAIN";
             this.Text = "Tyrannosaurus Plex";
-            ((System.ComponentModel.ISupportInitialize)(this.DGV_INJECTION_TABLE)).EndInit();
-            this.GRPBOX_RECORD.ResumeLayout(false);
             this.GRPBOX_DATABASE.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.DGV_RECIPE_TABLE)).EndInit();
             this.MENU_STRIP.ResumeLayout(false);
@@ -223,11 +174,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.DataGridView DGV_INJECTION_TABLE;
-        private System.Windows.Forms.Button BTN_RECORD_START;
-        private System.Windows.Forms.Button BTN_RECORD_STOP;
-        private System.Windows.Forms.Button BTN_REPLAY_START;
-        private System.Windows.Forms.GroupBox GRPBOX_RECORD;
         private System.Windows.Forms.GroupBox GRPBOX_DATABASE;
         private System.Windows.Forms.Button BTN_CONNECT;
         private System.Windows.Forms.Button BTN_ADD_RECIPE;
@@ -238,6 +184,7 @@
         private System.Windows.Forms.MenuStrip MENU_STRIP;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem MENU_ITEM_TOOL_STRIP;
+        private System.Windows.Forms.Button button1;
     }
 }
 

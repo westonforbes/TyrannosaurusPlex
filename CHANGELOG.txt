@@ -20,3 +20,11 @@
 
 2020-11-12-01 - I made significant changes between FORBES library rev 2020-11-11-01 and FORBES library rev 2020-11-12-01. As such I had to perform a bunch of little changes in
 				this program to make it compatible. Still working on moving stuff to BACKEND and cleaning up slop before I work on actually storing key sequences.
+
+2020-11-18-01 - I previously did a lot of work lazily on a DGV1 on the edit screen. It really was backend kind of work that should have been done on the underlying table
+				but it was a Friday and I didn't feel like troubleshooting. Converted all that work to working on the underlying table.
+
+				Did a lot of commenting and cleaning up.
+
+				Linked up the key sequence so now that records properly. Going to start a new revision to try to move some more stuff to the backend because I realized it is shared
+				between forms.

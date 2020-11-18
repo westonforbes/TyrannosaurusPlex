@@ -63,9 +63,6 @@ namespace TyrannosaurusPlex
             //Get the listings of checksheet types from the SQL DB, this will be used to populate a list box on the new form.
             DataTable CHECKSHEET_DATA = DB.GET_TABLE(Properties.DB.Default.CHECKSHEET_TABLE, Properties.DB.Default.CHECKSHEET_TABLE_COLUMN_SCHEMA); //Get the checksheet data listing to pass over to the form.
             
-            //Make a blank form.
-            var ADD_FORM = new FORM_ADD_RECIPE(CHECKSHEET_DATA); //No matter what, make a form.
-
             //Determine if the edit button is what called this method. If it is, we have to get the currently selected recipe.
             if ((Button)sender == BTN_EDIT_RECIPE) //Cast the sender into a button type and check if it is BTN_EDIT. If it is...
             {
@@ -73,8 +70,10 @@ namespace TyrannosaurusPlex
                 bool SUCCESS = GET_CURRENTLY_SELECTED_RECIPE_DATA(out CURRENT_RECORD); //Populate the object and store if it was a success. Function will return true on success.
                 if (SUCCESS)
                 {
-                    ADD_FORM = new FORM_ADD_RECIPE(CHECKSHEET_DATA, CURRENT_RECORD); //Modify the form object, reinitialize with optional CURRENT_RECORD attached.
-                                                                                     //FORM_ADD_RECIPE recognizes optional record attachment as a request to edit rather than add. 
+                    var ADD_FORM = new FORM_ADD_RECIPE(CHECKSHEET_DATA, CURRENT_RECORD); //Create a new form with optional CURRENT_RECORD attached.
+                                                                                         //FORM_ADD_RECIPE recognizes optional record attachment as a request to edit rather than add. 
+                    ADD_FORM.Show(); //Show the form.
+                    ADD_FORM.DATA_READY += new EventHandler(PROCESS_ADD_RECIPE_DATA); //Add handler for when the form has its data all set.
                 }
                 else //If getting data was unsuccessful...
                 {
@@ -82,8 +81,12 @@ namespace TyrannosaurusPlex
                     return;
                 }
             }
-            ADD_FORM.Show(); //Show the form.
-            ADD_FORM.DATA_READY += new EventHandler(PROCESS_ADD_RECIPE_DATA); //Add handler for when the form has its data all set.
+            else
+            {
+                var ADD_FORM = new FORM_ADD_RECIPE(CHECKSHEET_DATA); //Create a blank form.                                                                 
+                ADD_FORM.Show(); //Show the form.
+                ADD_FORM.DATA_READY += new EventHandler(PROCESS_ADD_RECIPE_DATA); //Add handler for when the form has its data all set.
+            }
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
         }
         private void DELETE_RECORD(object sender, EventArgs e) //Deletes the selected record.
@@ -229,6 +232,7 @@ namespace TyrannosaurusPlex
                 DATA.checksheet_type = RECIPE_TABLE_LOCAL.Rows[SELECTED_INDEX]["checksheet_type"].ToString();
                 DATA.csv_location = RECIPE_TABLE_LOCAL.Rows[SELECTED_INDEX]["csv_location"].ToString();
                 DATA.key_sequence = RECIPE_TABLE_LOCAL.Rows[SELECTED_INDEX]["key_sequence"].ToString();
+                DATA.timestamp_col = int.Parse(RECIPE_TABLE_LOCAL.Rows[SELECTED_INDEX]["timestamp_col"].ToString());
                 DATA.a_col = int.Parse(RECIPE_TABLE_LOCAL.Rows[SELECTED_INDEX]["a_col"].ToString());
                 DATA.b_col = int.Parse(RECIPE_TABLE_LOCAL.Rows[SELECTED_INDEX]["b_col"].ToString());
                 DATA.c_col = int.Parse(RECIPE_TABLE_LOCAL.Rows[SELECTED_INDEX]["c_col"].ToString());

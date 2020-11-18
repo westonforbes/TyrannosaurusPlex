@@ -30,3 +30,4 @@ Z:\My Software\TyrannosaurusPlex\obj\Debug\TyrannosaurusPlex.exe
 Z:\My Software\TyrannosaurusPlex\obj\Debug\TyrannosaurusPlex.pdb
 Z:\My Software\TyrannosaurusPlex\bin\Debug\FORBES.xml
 Z:\My Software\TyrannosaurusPlex\bin\Debug\KeystrokeAPI.pdb
+Z:\My Software\TyrannosaurusPlex\obj\Debug\TyrannosaurusPlex.csproj.CoreCompileInputs.cache
