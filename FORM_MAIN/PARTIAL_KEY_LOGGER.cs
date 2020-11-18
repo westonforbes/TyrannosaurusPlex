@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FORBES.KEY_LOGGER_NAMESPACE;
+using FORBES.TABLE_PROCESSOR_NAMESPACE;
 
 namespace TyrannosaurusPlex
 {
@@ -18,9 +19,9 @@ namespace TyrannosaurusPlex
         //Objects
         List<string> SEQUENCE_LIST = new List<string> { };
         DataTable SEQUENCE_DATATABLE = new DataTable();
-        private bool RECORD_SEQUENCE_ACTIVE = false;
         private bool REPLAY_SEQUENCE_ACTIVE = false;
-        DataTable INJECTION_TABLE = new DataTable();
+        DataTable INJECTION_TABLE = BACKEND.CREATE_INJECTION_TABLE();
+
 
         //Methods
 
@@ -28,30 +29,14 @@ namespace TyrannosaurusPlex
         {
             KEY_LOGGER.KEY_PRESSED += new EventHandler(KEY_LOGGER_KEY_PRESSED_EVENT);
             SEQUENCE_DATATABLE.Columns.Add("Keys");
-            BTN_RECORD_STOP.Enabled = false;
-        }
-        private void INJECTION_TABLE_SETUP() //Create the table that we'll pull values from.
-        {
-            INJECTION_TABLE.Columns.Add("Letter", typeof(string));
-            INJECTION_TABLE.Columns.Add("Value", typeof(string));
-            DGV_INJECTION_TABLE.DataSource = INJECTION_TABLE;
-            for (int i = 65; i <= 90; i++)
-            {
-                INJECTION_TABLE.Rows.Add((char)i, "");
-            }
         }
         private void KEY_LOGGER_KEY_PRESSED_EVENT(object sender, EventArgs e) //Event setup in KEY_LOGGER_SETUP.
         {
-            if (RECORD_SEQUENCE_ACTIVE) //If the record sequence is active...
+            if (REPLAY_SEQUENCE_ACTIVE) //Check if the replay sequence is active...
             {
-                SEQUENCE_LIST.Add((string)sender); //Add the key to the sequence.
-                SEQUENCE_DATATABLE.Rows.Add((string)sender); //Add the key to the sequence.
-            }
-            else if (REPLAY_SEQUENCE_ACTIVE) //Check if the replay sequence is active (and record is not active due to "else").
-            {
-                if((string) sender == "{INSERT}")
-                    REPLAY(SEQUENCE_LIST,INJECTION_TABLE);
-                if((string) sender == "{ESC}")
+                if ((string)sender == "{INSERT}")
+                    REPLAY(SEQUENCE_LIST, INJECTION_TABLE);
+                if ((string)sender == "{ESC}")
                     REPLAY_SEQUENCE_STOP(null, null);
             }
         }
@@ -59,7 +44,7 @@ namespace TyrannosaurusPlex
         {
             KEY_LOGGER.START_KEY_LOGGER();
         }
-        private void KEY_LOGGER_PAUSE(object sender, EventArgs e) //Not currently used.
+        private void KEY_LOGGER_STOP(object sender, EventArgs e) //Not currently used.
         {
             KEY_LOGGER.STOP_KEY_LOGGER();
         }
@@ -67,39 +52,22 @@ namespace TyrannosaurusPlex
         {
             KEY_LOGGER.CLEAR_KEY_LOGGER();
         }
-        private void RECORD_SEQUENCE_START(object sender, EventArgs e) //Records keys to SEQUENCE_LIST/DATATABLE.
-        {
-            KEY_LOGGER.START_KEY_LOGGER();
-            BTN_RECORD_START.Enabled = false;
-            BTN_RECORD_STOP.Enabled = true;
-            SEQUENCE_LIST.Clear();
-            SEQUENCE_DATATABLE.Clear();
-            RECORD_SEQUENCE_ACTIVE = true;
-        }
-        private void RECORD_SEQUENCE_STOP(object sender, EventArgs e) //Stops recording.
-        {
-            BTN_RECORD_START.Enabled = true;
-            BTN_RECORD_STOP.Enabled = false;
-            RECORD_SEQUENCE_ACTIVE = false;
-            KEY_LOGGER.STOP_KEY_LOGGER();
-        }
         private void REPLAY_SEQUENCE_START(object sender, EventArgs e)
         {
-            KEY_LOGGER_START(null,null); //Start the keylogger.
+            KEY_LOGGER_START(null, null); //Start the keylogger.
             REPLAY_SEQUENCE_ACTIVE = true;
         }
         private void REPLAY_SEQUENCE_STOP(object sender, EventArgs e)
         {
-            KEY_LOGGER_PAUSE(null, null); //Stop the keylogger.
+            KEY_LOGGER_STOP(null, null); //Stop the keylogger.
             REPLAY_SEQUENCE_ACTIVE = false;
         }
         private void REPLAY(List<string> PASSED_SEQUENCE, DataTable TABLE_TO_INJECT)
         {
-            RECORD_SEQUENCE_STOP(null, null); //Ensure the recording has stopped.
             SendKeys.Flush(); //Wait for the buffer to empty.
             foreach (string KEY in PASSED_SEQUENCE) //For each key in the recorded sequence...
             {
-                bool IS_CHAR = Char.IsLetterOrDigit(KEY,0); //Check if its a letter.
+                bool IS_CHAR = Char.IsLetterOrDigit(KEY, 0); //Check if its a letter.
                 if (IS_CHAR) //If the key is a letter, this is an indication that substitution needs to happen...
                 {
                     foreach (DataRow ROW in TABLE_TO_INJECT.Rows) //Cycle through the table to find the right row.
@@ -123,6 +91,40 @@ namespace TyrannosaurusPlex
             }
             REPLAY_SEQUENCE_ACTIVE = false; //Indicate the sequence is done.
         }
-        
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            EVENTS.LOG_MESSAGE(1, "ENTER");
+
+            //First instruct the user how to use the injector.
+            string MESSAGE = "Navigate to the first field and press the insert key.";
+            MessageBox.Show(MESSAGE, "Instructions", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            //Get the currently selected recipe data.
+            RECIPE_DATA DATA = new RECIPE_DATA();
+            GET_CURRENTLY_SELECTED_RECIPE_DATA(out DATA);
+
+            //Process the key sequence from the recipe into a list and table.
+            SEQUENCE_LIST.Clear();
+            SEQUENCE_DATATABLE.Clear();
+            BACKEND.LOAD_IN_KEY_SEQUENCE(DATA.key_sequence, ref SEQUENCE_LIST, ref SEQUENCE_DATATABLE);
+
+            //Get data from file.
+            TABLE_PROCESSOR KEYENCE_PROCESSOR = new TABLE_PROCESSOR();
+            DataTable TABLE = new DataTable();
+            DataTable INSTRUCTIONS = INSTRUCTION_SET.CREATE_INSTRUCTION_TABLE();
+            KEYENCE_PROCESSOR.PROCESS_INSTRUCTIONS(ref TABLE, ref INSTRUCTIONS, DATA.csv_location, ',');
+
+
+            //Fill out the injection table.
+            BACKEND.MOVE_CSV_DATA_INTO_INJECTION_TABLE(TABLE, INJECTION_TABLE);
+
+            //Start the keylogger.
+            REPLAY_SEQUENCE_START(null, null);
+
+            EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
+
+        }
     }
 }

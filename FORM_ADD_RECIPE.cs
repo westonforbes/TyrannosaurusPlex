@@ -18,8 +18,8 @@ namespace TyrannosaurusPlex
     {
         //Events, Delegates, Handlers
         public event EventHandler DATA_READY; //Create a EventHandler Delegate that we can invoke.
-        readonly List<string> SEQUENCE_LIST = new List<string> { }; //Key data in list.
-        readonly DataTable SEQUENCE_DATATABLE = new DataTable(); //Key data DataTable.
+        List<string> SEQUENCE_LIST = new List<string> { }; //Key data in list.
+        DataTable SEQUENCE_DATATABLE = new DataTable(); //Key data DataTable.
         private bool RECORD_SEQUENCE_ACTIVE = false;
         private bool REPLAY_SEQUENCE_ACTIVE = false;
         DataTable INJECTION_TABLE = new DataTable();
@@ -138,25 +138,7 @@ namespace TyrannosaurusPlex
             DGV1.DataSource = TABLE;
             EVENTS.LOG_MESSAGE(3, "Table bound to DGV.");
             COLOR_DGV_COLUMNS();
-            LOAD_IN_KEY_SEQUENCE(CURRENT_RECIPE_DATA.key_sequence);
-            EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
-        }
-
-        private void LOAD_IN_KEY_SEQUENCE(string KEY_SEQ)
-        {
-            EVENTS.LOG_MESSAGE(1, "ENTER");
-            string[] ARRAY = KEY_SEQ.Split(',');
-            SEQUENCE_LIST.Clear(); //Be sure the list is clear.
-            SEQUENCE_DATATABLE.Clear(); //Be sure the list is clear.
-            foreach (string KEY in ARRAY)
-            {
-                if (KEY != "" && KEY != null)
-                {
-                    SEQUENCE_LIST.Add(KEY);
-                    SEQUENCE_DATATABLE.Rows.Add(KEY);
-                }
-            }
-            dataGridView2.DataSource = SEQUENCE_DATATABLE;
+            BACKEND.LOAD_IN_KEY_SEQUENCE(CURRENT_RECIPE_DATA.key_sequence, ref SEQUENCE_LIST, ref SEQUENCE_DATATABLE);
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
         }
         

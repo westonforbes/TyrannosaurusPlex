@@ -208,5 +208,28 @@ namespace TyrannosaurusPlex
                 System.Threading.Thread.Sleep(75); //Delay a bit.
             }
         }
+
+        /// <summary>
+        /// This method loads a string key sequence into a list and table.
+        /// </summary>
+        /// <param name="KEY_SEQ">The comma delimited string to process.</param>
+        /// <param name="SEQUENCE_LIST">A list of strings to put the results in.</param>
+        /// <param name="SEQUENCE_DATATABLE">A single column data table to put the results in.</param>
+        public static void LOAD_IN_KEY_SEQUENCE(string KEY_SEQ, ref List<string> SEQUENCE_LIST, ref DataTable SEQUENCE_DATATABLE)
+        {
+            EVENTS.LOG_MESSAGE(1, "ENTER");
+            string[] ARRAY = KEY_SEQ.Split(',');
+            SEQUENCE_LIST.Clear(); //Be sure the list is clear.
+            SEQUENCE_DATATABLE.Clear(); //Be sure the list is clear.
+            foreach (string KEY in ARRAY)
+            {
+                if (KEY != "" && KEY != null)
+                {
+                    SEQUENCE_LIST.Add(KEY);
+                    SEQUENCE_DATATABLE.Rows.Add(KEY);
+                }
+            }
+            EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
+        }
     }
 }

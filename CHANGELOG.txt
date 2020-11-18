@@ -28,3 +28,5 @@
 
 				Linked up the key sequence so now that records properly. Going to start a new revision to try to move some more stuff to the backend because I realized it is shared
 				between forms.
+
+2020-11-18-02 - Almost there. Most everything is functioning. Got more to do though.

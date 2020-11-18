@@ -20,7 +20,6 @@ namespace TyrannosaurusPlex
             EVENTS.LOG_MESSAGE(1, "INITIALIZE");
             InitializeComponent();
             KEY_LOGGER_SETUP();
-            INJECTION_TABLE_SETUP();
             DB_SETUP();
         }
         private void MENU_ITEM_TOOL_STRIP_Click(object sender, EventArgs e)
@@ -43,13 +42,6 @@ namespace TyrannosaurusPlex
                 LOG_FORM.Show();
             }
         }
-        private void button1_Click(object sender, EventArgs e)
-        {
-            string MESSAGE = "Navigate to the first field and press the insert key.";
-            MessageBox.Show(MESSAGE, "Instructions",MessageBoxButtons.OK,MessageBoxIcon.Information);
-            RECIPE_DATA DATA = new RECIPE_DATA();
-            GET_CURRENTLY_SELECTED_RECIPE_DATA(out DATA);
 
-        }
     }
 }
