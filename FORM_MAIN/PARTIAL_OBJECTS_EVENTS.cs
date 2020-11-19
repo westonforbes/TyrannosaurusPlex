@@ -23,6 +23,7 @@ namespace TyrannosaurusPlex
         public static event EventHandler OK_TO_CLOSE_ADD_RECIPE_FORM; //Event used to notify the FORM_ADD_RECIPE that its ok to close.
         //This is needed because FORM_MAIN does some processing on form close and there is an opprotunity where the user can cancel the
         //form closing. Therefor FORM_MAIN needs to call the shots.
+        public static event EventHandler DONE_REPLAYING;
     }
 
 }

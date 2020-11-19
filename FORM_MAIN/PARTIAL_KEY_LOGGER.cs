@@ -21,7 +21,7 @@ namespace TyrannosaurusPlex
         DataTable SEQUENCE_DATATABLE = new DataTable();
         private bool REPLAY_SEQUENCE_ACTIVE = false;
         DataTable INJECTION_TABLE = BACKEND.CREATE_INJECTION_TABLE();
-
+     
 
         //Methods
 
@@ -35,9 +35,26 @@ namespace TyrannosaurusPlex
             if (REPLAY_SEQUENCE_ACTIVE) //Check if the replay sequence is active...
             {
                 if ((string)sender == "{INSERT}")
+                {
                     REPLAY(SEQUENCE_LIST, INJECTION_TABLE);
+                    SendKeys.SendWait("{INSERT}"); //Since insert is a latched key, we need to turn it back.
+                    System.Threading.Thread.Sleep(75); //Delay a bit.
+                }
                 if ((string)sender == "{ESC}")
+                {
                     REPLAY_SEQUENCE_STOP(null, null);
+                    //Check if form is open.
+                    FormCollection COLLECTION = Application.OpenForms; //Get a collection of all the open forms.
+                    foreach (Form FORM in COLLECTION) //Go through each open form...
+                    {
+                        if (FORM.Name == "FORM_REPLAY") //If the evaluated form has the same name as the form we're about to open...
+                        {
+                            FORM.Close();
+                            return;
+                        }
+                    }
+                }
+
             }
         }
         private void KEY_LOGGER_START(object sender, EventArgs e) //Starts the keylogger.
@@ -90,16 +107,11 @@ namespace TyrannosaurusPlex
                 System.Threading.Thread.Sleep(75); //Delay a bit.
             }
             REPLAY_SEQUENCE_ACTIVE = false; //Indicate the sequence is done.
+            DONE_REPLAYING?.Invoke(null, null);
         }
-
-
         private void button1_Click(object sender, EventArgs e)
         {
             EVENTS.LOG_MESSAGE(1, "ENTER");
-
-            //First instruct the user how to use the injector.
-            string MESSAGE = "Navigate to the first field and press the insert key.";
-            MessageBox.Show(MESSAGE, "Instructions", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             //Get the currently selected recipe data.
             RECIPE_DATA DATA = new RECIPE_DATA();
@@ -116,6 +128,32 @@ namespace TyrannosaurusPlex
             DataTable INSTRUCTIONS = INSTRUCTION_SET.CREATE_INSTRUCTION_TABLE();
             KEYENCE_PROCESSOR.PROCESS_INSTRUCTIONS(ref TABLE, ref INSTRUCTIONS, DATA.csv_location, ',');
 
+            //Label the columns.
+            BACKEND.LABEL_DATATABLE_COLUMNS(ref TABLE,DATA);
+
+            //Check the timestamp.
+            string TIME_STRING = null;
+            for (int i = TABLE.Rows.Count - 1; i >= 0; i--)
+            {
+                TIME_STRING = TABLE.Rows[i][DATA.timestamp_col].ToString();
+                if (TIME_STRING != "" && TIME_STRING != null)
+                    break;   
+            }
+            DateTime TIME = DateTime.Parse(TIME_STRING);
+            TimeSpan TIME_AGO = DateTime.Now.Subtract(TIME);
+            if(TIME_AGO.TotalHours > 1)
+            {
+                string MESSAGE = string.Format("The last entry detected is {0} Days, {1} Hours and {2} Minutes old. Are you sure this is correct?", 
+                    TIME_AGO.Days,
+                    TIME_AGO.Hours,
+                    TIME_AGO.Minutes);
+                if (MessageBox.Show(MESSAGE, "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                    return;
+            }
+
+            FORM_REPLAY NEW_FORM = new FORM_REPLAY();
+            NEW_FORM.Show();
+            NEW_FORM.TopMost = true;
 
             //Fill out the injection table.
             BACKEND.MOVE_CSV_DATA_INTO_INJECTION_TABLE(TABLE, INJECTION_TABLE);

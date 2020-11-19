@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using FORBES.LOGGER_NAMESPACE;
 using FORBES.KEY_LOGGER_NAMESPACE;
+using System.Diagnostics;
+
 
 namespace TyrannosaurusPlex
 {

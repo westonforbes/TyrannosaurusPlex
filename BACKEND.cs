@@ -231,5 +231,42 @@ namespace TyrannosaurusPlex
             }
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
         }
+
+        /// <summary>
+        /// This method labels all the columns in TABLE in accordance with DATA.
+        /// </summary>
+        /// <param name="TABLE">The table to label.</param>
+        /// <param name="DATA">The structure that holds the labelling.</param>
+        public static void LABEL_DATATABLE_COLUMNS(ref DataTable TABLE, RECIPE_DATA DATA)
+        {
+            if (DATA.a_col >= 0)
+                TABLE.Columns[DATA.a_col].ColumnName = "A";
+            if (DATA.b_col >= 0)
+                TABLE.Columns[DATA.b_col].ColumnName = "B";
+            if (DATA.c_col >= 0)
+                TABLE.Columns[DATA.c_col].ColumnName = "C";
+            if (DATA.d_col >= 0)
+                TABLE.Columns[DATA.d_col].ColumnName = "D";
+            if (DATA.e_col >= 0)
+                TABLE.Columns[DATA.e_col].ColumnName = "E";
+            if (DATA.f_col >= 0)
+                TABLE.Columns[DATA.f_col].ColumnName = "F";
+            if (DATA.g_col >= 0)
+                TABLE.Columns[DATA.g_col].ColumnName = "G";
+            if (DATA.h_col >= 0)
+                TABLE.Columns[DATA.h_col].ColumnName = "H";
+            if (DATA.i_col >= 0)
+                TABLE.Columns[DATA.i_col].ColumnName = "I";
+            if (DATA.j_col >= 0)
+                TABLE.Columns[DATA.j_col].ColumnName = "J";
+            if (DATA.k_col >= 0)
+                TABLE.Columns[DATA.k_col].ColumnName = "K";
+            if (DATA.l_col >= 0)
+                TABLE.Columns[DATA.l_col].ColumnName = "L";
+            if (DATA.m_col >= 0)
+                TABLE.Columns[DATA.m_col].ColumnName = "M";
+            if (DATA.timestamp_col >= 0)
+                TABLE.Columns[DATA.timestamp_col].ColumnName = "TimeStamp";
+        }
     }
 }

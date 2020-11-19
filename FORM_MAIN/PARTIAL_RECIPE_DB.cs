@@ -133,6 +133,7 @@ namespace TyrannosaurusPlex
             BTN_DELETE_RECIPE.Enabled = E.FULLY_CONNECTED;
             DGV_RECIPE_TABLE.Enabled = E.FULLY_CONNECTED;
             BTN_EDIT_RECIPE.Enabled = E.FULLY_CONNECTED;
+            BTN_INJECT.Enabled = E.FULLY_CONNECTED;
 
             //Controls to disable on connection.
             BTN_CONNECT.Enabled = !E.FULLY_CONNECTED;

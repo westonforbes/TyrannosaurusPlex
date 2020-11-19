@@ -603,8 +603,6 @@ namespace TyrannosaurusPlex
                     if (SUCCESS)
                         BACKEND.MOVE_CSV_DATA_INTO_INJECTION_TABLE(SOURCE, INJECTION_TABLE);
 
-                    dataGridView1.DataSource = INJECTION_TABLE; //Temporary.
-
                     BACKEND.REPLAY(SEQUENCE_LIST, INJECTION_TABLE); //Where the actual replaying happens.
                     System.Threading.Thread.Sleep(75); //Delay a bit.
                     SendKeys.SendWait("{INSERT}"); //As the insert key is a latched key, we want to turn it back to its original state, so resend.

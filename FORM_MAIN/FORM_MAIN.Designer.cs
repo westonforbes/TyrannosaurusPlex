@@ -39,7 +39,7 @@
             this.MENU_STRIP = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MENU_ITEM_TOOL_STRIP = new System.Windows.Forms.ToolStripMenuItem();
-            this.button1 = new System.Windows.Forms.Button();
+            this.BTN_INJECT = new System.Windows.Forms.Button();
             this.GRPBOX_DATABASE.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGV_RECIPE_TABLE)).BeginInit();
             this.MENU_STRIP.SuspendLayout();
@@ -124,7 +124,7 @@
             this.MENU_ITEM_TOOL_STRIP});
             this.MENU_STRIP.Location = new System.Drawing.Point(0, 0);
             this.MENU_STRIP.Name = "MENU_STRIP";
-            this.MENU_STRIP.Size = new System.Drawing.Size(430, 24);
+            this.MENU_STRIP.Size = new System.Drawing.Size(433, 24);
             this.MENU_STRIP.TabIndex = 11;
             this.MENU_STRIP.Text = "Menu Strip";
             // 
@@ -141,25 +141,27 @@
             this.MENU_ITEM_TOOL_STRIP.Text = "Logs";
             this.MENU_ITEM_TOOL_STRIP.Click += new System.EventHandler(this.MENU_ITEM_TOOL_STRIP_Click);
             // 
-            // button1
+            // BTN_INJECT
             // 
-            this.button1.Location = new System.Drawing.Point(15, 210);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(158, 52);
-            this.button1.TabIndex = 12;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.BTN_INJECT.Enabled = false;
+            this.BTN_INJECT.Location = new System.Drawing.Point(15, 210);
+            this.BTN_INJECT.Name = "BTN_INJECT";
+            this.BTN_INJECT.Size = new System.Drawing.Size(158, 52);
+            this.BTN_INJECT.TabIndex = 12;
+            this.BTN_INJECT.Text = "Inject Data";
+            this.BTN_INJECT.UseVisualStyleBackColor = true;
+            this.BTN_INJECT.Click += new System.EventHandler(this.button1_Click);
             // 
             // FORM_MAIN
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(430, 270);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(433, 271);
+            this.Controls.Add(this.BTN_INJECT);
             this.Controls.Add(this.DGV_RECIPE_TABLE);
             this.Controls.Add(this.GRPBOX_DATABASE);
             this.Controls.Add(this.MENU_STRIP);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.MENU_STRIP;
             this.Name = "FORM_MAIN";
@@ -184,7 +186,7 @@
         private System.Windows.Forms.MenuStrip MENU_STRIP;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem MENU_ITEM_TOOL_STRIP;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button BTN_INJECT;
     }
 }
 
