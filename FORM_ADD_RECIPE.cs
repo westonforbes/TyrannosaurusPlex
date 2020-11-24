@@ -542,7 +542,6 @@ namespace TyrannosaurusPlex
             EVENTS.LOG_MESSAGE(3, "Key pressed EventHandler installed.");
             BTN_RECORD_STOP.Enabled = false;
             INJECTION_TABLE = BACKEND.CREATE_INJECTION_TABLE(); //Properly format the injection table. 
-            BTN_REPLAY.Enabled = !RECORD_SEQUENCE_ACTIVE;
             EVENTS.LOG_MESSAGE(3, "Tables are set up.");
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
         }
@@ -630,7 +629,6 @@ namespace TyrannosaurusPlex
             SEQUENCE_DATATABLE.Clear();
             EVENTS.LOG_MESSAGE(3, "Cleared sequence tables.");
             RECORD_SEQUENCE_ACTIVE = true;
-            BTN_REPLAY.Enabled = !RECORD_SEQUENCE_ACTIVE;
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
         }
 
@@ -647,7 +645,6 @@ namespace TyrannosaurusPlex
             BTN_RECORD_STOP.Enabled = false;
             RECORD_SEQUENCE_ACTIVE = false;
             KEY_LOGGER.STOP_KEY_LOGGER(); //Stop the keylogger in the FORBES library.
-            BTN_REPLAY.Enabled = !RECORD_SEQUENCE_ACTIVE;
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
         }
 
@@ -679,5 +676,9 @@ namespace TyrannosaurusPlex
             EVENTS.LOG_MESSAGE(1, "EXIT_SUCCESS");
         }
 
+        private void LISTBOX_CHECKSHEET_TYPE_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

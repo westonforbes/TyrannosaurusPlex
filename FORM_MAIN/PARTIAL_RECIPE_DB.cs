@@ -129,14 +129,11 @@ namespace TyrannosaurusPlex
             var E = (MYSQL_COMS.CONNECTION_CHANGED_EVENT_ARGS)e;
             //Controls to enable on connection.
             BTN_ADD_RECIPE.Enabled = E.FULLY_CONNECTED;
-            BTN_DISCONNECT.Enabled = E.FULLY_CONNECTED;
             BTN_DELETE_RECIPE.Enabled = E.FULLY_CONNECTED;
             DGV_RECIPE_TABLE.Enabled = E.FULLY_CONNECTED;
             BTN_EDIT_RECIPE.Enabled = E.FULLY_CONNECTED;
             BTN_INJECT.Enabled = E.FULLY_CONNECTED;
 
-            //Controls to disable on connection.
-            BTN_CONNECT.Enabled = !E.FULLY_CONNECTED;
 
             if(E.FULLY_CONNECTED)
             {

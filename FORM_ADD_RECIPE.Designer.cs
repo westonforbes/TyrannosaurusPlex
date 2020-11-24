@@ -59,7 +59,6 @@
             this.BTN_A = new System.Windows.Forms.Button();
             this.BTN_RECORD_START = new System.Windows.Forms.Button();
             this.BTN_RECORD_STOP = new System.Windows.Forms.Button();
-            this.BTN_REPLAY = new System.Windows.Forms.Button();
             this.GRP_BOX_DATA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DGV1)).BeginInit();
             this.GRP_BOX_COLUMN_ASSIGNERS.SuspendLayout();
@@ -107,6 +106,7 @@
             this.LISTBOX_CHECKSHEET_TYPE.Name = "LISTBOX_CHECKSHEET_TYPE";
             this.LISTBOX_CHECKSHEET_TYPE.Size = new System.Drawing.Size(100, 95);
             this.LISTBOX_CHECKSHEET_TYPE.TabIndex = 4;
+            this.LISTBOX_CHECKSHEET_TYPE.SelectedIndexChanged += new System.EventHandler(this.LISTBOX_CHECKSHEET_TYPE_SelectedIndexChanged);
             // 
             // LBL_CHECKSHEET_TYPE
             // 
@@ -361,22 +361,11 @@
             this.BTN_RECORD_STOP.UseVisualStyleBackColor = true;
             this.BTN_RECORD_STOP.Click += new System.EventHandler(this.RECORD_SEQUENCE_STOP);
             // 
-            // BTN_REPLAY
-            // 
-            this.BTN_REPLAY.Location = new System.Drawing.Point(15, 245);
-            this.BTN_REPLAY.Name = "BTN_REPLAY";
-            this.BTN_REPLAY.Size = new System.Drawing.Size(100, 30);
-            this.BTN_REPLAY.TabIndex = 112;
-            this.BTN_REPLAY.Text = "Replay";
-            this.BTN_REPLAY.UseVisualStyleBackColor = true;
-            this.BTN_REPLAY.Click += new System.EventHandler(this.REPLAY_SEQUENCE_START);
-            // 
             // FORM_ADD_RECIPE
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(609, 454);
-            this.Controls.Add(this.BTN_REPLAY);
+            this.ClientSize = new System.Drawing.Size(708, 451);
             this.Controls.Add(this.BTN_RECORD_STOP);
             this.Controls.Add(this.BTN_RECORD_START);
             this.Controls.Add(this.GRP_BOX_COLUMN_ASSIGNERS);
@@ -436,6 +425,5 @@
         private System.Windows.Forms.Button BTN_TIMESTAMP;
         private System.Windows.Forms.Button BTN_RECORD_START;
         private System.Windows.Forms.Button BTN_RECORD_STOP;
-        private System.Windows.Forms.Button BTN_REPLAY;
     }
 }

@@ -45,5 +45,9 @@ namespace TyrannosaurusPlex
             }
         }
 
+        private void FORM_MAIN_Load(object sender, EventArgs e)
+        {
+            CONNECT_TO_DB(null, null);
+        }
     }
 }

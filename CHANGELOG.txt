@@ -32,3 +32,5 @@
 2020-11-18-02 - Almost there. Most everything is functioning. Got more to do though.
 
 2020-11-19-01 - FIRST FULLY FUNCTIONAL COPY! Yay!
+
+2020-11-24-01 - Some final cleanup and documentation writing. Removed DB buttons.
